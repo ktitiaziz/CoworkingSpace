@@ -1,0 +1,772 @@
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+  <div class="logo">
+    Coworking<span>Space</span>
+  </div>
+
+
+  <div class="nav-links">
+
+    <a routerLink="/">
+      Home
+    </a>
+
+    <a routerLink="/spaces">
+      Spaces
+    </a>
+
+    <a href="#">
+      About
+    </a>
+
+    <button
+      type="button"
+      class="login-btn"
+    >
+      Login
+    </button>
+
+  </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<main class="reservation-page">
+
+
+  <!-- BACK -->
+
+  <a
+    class="back-link"
+    [routerLink]="['/spaces', spaceId]"
+  >
+    ← Back to workspace
+  </a>
+
+
+
+  <!-- ===================================================
+       HEADER
+  ==================================================== -->
+
+  <section class="reservation-header">
+
+    <div>
+
+      <p class="eyebrow">
+        RESERVE YOUR SPACE
+      </p>
+
+      <h1>
+        Choose your seat.
+      </h1>
+
+      <p class="subtitle">
+        Select an available seat from the workspace floor plan.
+      </p>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ===================================================
+       LEGEND
+  ==================================================== -->
+
+  <div class="legend">
+
+    <div class="legend-item">
+
+      <span class="legend-seat available"></span>
+
+      <span>
+        Available
+      </span>
+
+    </div>
+
+
+    <div class="legend-item">
+
+      <span class="legend-seat reserved"></span>
+
+      <span>
+        Reserved
+      </span>
+
+    </div>
+
+
+    <div class="legend-item">
+
+      <span class="legend-seat mine"></span>
+
+      <span>
+        Your reservation
+      </span>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ===================================================
+       WORKSPACE + SUMMARY
+  ==================================================== -->
+
+  <section class="workspace-layout">
+
+
+    <!-- =================================================
+         FLOOR PLAN
+    ================================================== -->
+
+    <div class="floor-plan">
+
+
+      <!-- ===============================================
+           OFFICE
+      ================================================ -->
+
+      <div class="architect-room office-room">
+
+        <span class="room-label">
+          OFFICE 57
+        </span>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           CONFERENCE ROOM
+      ================================================ -->
+
+      <div class="architect-room conference-room">
+
+        <span class="room-title">
+          NEWTON
+        </span>
+
+        <span class="room-subtitle">
+          CONFERENCE ROOM
+        </span>
+
+
+        <div class="conference-table">
+          MEETING
+        </div>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           KITCHEN
+      ================================================ -->
+
+      <div class="architect-room kitchen">
+
+        <span class="room-label">
+          KITCHEN
+        </span>
+
+
+        <div class="kitchen-counter"></div>
+
+        <div class="kitchen-table"></div>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           LEFT TOP DESKS
+      ================================================ -->
+
+      <div class="desk-zone zone-left-top">
+
+        <span class="zone-title">
+          DESK AREA
+        </span>
+
+
+        <div class="desk desk-1"></div>
+
+        <div class="desk desk-2"></div>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           LEFT MIDDLE
+      ================================================ -->
+
+      <div class="desk-zone zone-left-middle">
+
+        <span class="zone-title">
+          DESK AREA
+        </span>
+
+
+        <div class="desk desk-3"></div>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           TABLE A
+      ================================================ -->
+
+      <div class="workspace-table table-a">
+
+        <span>
+          TABLE A
+        </span>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           TABLE B
+      ================================================ -->
+
+      <div class="workspace-table table-b">
+
+        <span>
+          TABLE B
+        </span>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           TABLE C
+      ================================================ -->
+
+      <div class="workspace-table table-c">
+
+        <span>
+          TABLE C
+        </span>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           TABLE D
+      ================================================ -->
+
+      <div class="workspace-table table-d">
+
+        <span>
+          TABLE D
+        </span>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           TABLE E
+      ================================================ -->
+
+      <div class="workspace-table table-e">
+
+        <span>
+          TABLE E
+        </span>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           TABLE F
+      ================================================ -->
+
+      <div class="workspace-table table-f">
+
+        <span>
+          TABLE F
+        </span>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           TABLE G
+      ================================================ -->
+
+      <div class="workspace-table table-g">
+
+        <span>
+          TABLE G
+        </span>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           INDIVIDUAL DESKS
+      ================================================ -->
+
+      <div class="right-desk-area">
+
+        <span class="zone-title">
+          INDIVIDUAL DESKS
+        </span>
+
+
+        <div class="vertical-desk"></div>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           LOUNGE
+      ================================================ -->
+
+      <div class="lounge">
+
+        <span>
+          LOUNGE
+        </span>
+
+
+        <div class="sofa sofa-left"></div>
+
+        <div class="sofa sofa-right"></div>
+
+        <div class="coffee-table"></div>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           SMALL MEETING ROOM
+      ================================================ -->
+
+      <div class="architect-room small-meeting-room">
+
+        <span>
+          MEETING ROOM
+        </span>
+
+
+        <div class="small-table"></div>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           ENTRANCE
+      ================================================ -->
+
+      <div class="entrance">
+        ENTRANCE
+      </div>
+
+
+
+      <!-- ===============================================
+           SEATS
+      ================================================ -->
+
+      <div class="seat-layer">
+
+        @for (seat of seats; track seat.id) {
+
+          <button
+            type="button"
+            class="seat"
+
+            [class.available]="seat.status === 'available'"
+            [class.reserved]="seat.status === 'reserved'"
+            [class.mine]="seat.status === 'mine'"
+            [class.selected]="isSelected(seat)"
+
+            [style.top]="seat.position.top"
+            [style.left]="seat.position.left"
+            [style.right]="seat.position.right"
+
+            [disabled]="seat.status === 'reserved'"
+
+            [attr.aria-label]="'Seat ' + seat.number"
+
+            (click)="selectSeat(seat)"
+          >
+
+            {{ seat.number }}
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         RESERVATION SUMMARY
+    ================================================== -->
+
+    <aside class="reservation-summary">
+
+
+      <p class="summary-label">
+        YOUR RESERVATION
+      </p>
+
+
+
+      @if (selectedSeat) {
+
+
+        <!-- ============================================
+             SELECTED SEAT
+        ============================================= -->
+
+        <div class="selected-seat">
+
+          <span class="selected-icon">
+            ✓
+          </span>
+
+
+          <div>
+
+            <small>
+              Selected seat
+            </small>
+
+            <strong>
+              Seat {{ selectedSeat.number }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ============================================
+             DETAILS
+        ============================================= -->
+
+        <div class="summary-line">
+
+          <span>
+            Workspace
+          </span>
+
+          <strong>
+            {{ workspaceName }}
+          </strong>
+
+        </div>
+
+
+        <div class="summary-line">
+
+          <span>
+            Duration
+          </span>
+
+          <span>
+            1 day
+          </span>
+
+        </div>
+
+
+        <div class="summary-line">
+
+          <span>
+            Seat
+          </span>
+
+          <span>
+            #{{ selectedSeat.number }}
+          </span>
+
+        </div>
+
+
+        <div class="summary-line">
+
+          <span>
+            Access
+          </span>
+
+          <span>
+            Full day
+          </span>
+
+        </div>
+
+
+
+        <hr>
+
+
+
+        <!-- ============================================
+             TOTAL
+        ============================================= -->
+
+        <div class="total">
+
+          <span>
+            Total
+          </span>
+
+          <strong>
+            {{ workspacePrice }} DT
+          </strong>
+
+        </div>
+
+
+
+        <!-- ============================================
+             CONFIRM
+        ============================================= -->
+
+       <button
+  type="button"
+  class="confirm-btn"
+  (click)="confirmReservation()"
+>
+  Confirm Reservation
+</button>
+        
+        <!-- CHANGE SEAT -->
+
+        <button
+          type="button"
+          class="change-seat-btn"
+          (click)="selectedSeat = null"
+        >
+
+          Change seat
+
+        </button>
+
+
+      } @else {
+
+
+        <!-- ============================================
+             NO SEAT
+        ============================================= -->
+
+        <div class="no-seat">
+
+          <div class="empty-icon">
+            🪑
+          </div>
+
+
+          <h3>
+            No seat selected
+          </h3>
+
+
+          <p>
+            Select an available seat from the
+            floor plan to continue.
+          </p>
+
+        </div>
+
+      }
+
+
+    </aside>
+
+
+  </section>
+
+</main>
+<!-- =====================================================
+     CONFIRMATION MODAL
+===================================================== -->
+
+@if (showConfirmation) {
+
+  <div class="modal-overlay">
+
+    <div class="confirmation-modal">
+
+      <!-- Close -->
+
+      <button
+        type="button"
+        class="modal-close"
+        (click)="closeConfirmation()"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+
+      <!-- Success icon -->
+
+      <div class="success-icon">
+        ✓
+      </div>
+
+
+      <!-- Header -->
+
+      <p class="modal-eyebrow">
+        RESERVATION CONFIRMED
+      </p>
+
+      <h2>
+        You're all set!
+      </h2>
+
+      <p class="modal-description">
+        Your workspace has been successfully reserved.
+      </p>
+
+
+      <!-- Reservation details -->
+
+      <div class="confirmation-details">
+
+        <div class="confirmation-row">
+
+          <span>
+            Workspace
+          </span>
+
+          <strong>
+            CoworkingSpace
+          </strong>
+
+        </div>
+
+
+        <div class="confirmation-row">
+
+          <span>
+            Seat
+          </span>
+
+          <strong>
+            #{{ selectedSeat?.number }}
+          </strong>
+
+        </div>
+
+
+        <div class="confirmation-row">
+
+          <span>
+            Date
+          </span>
+
+          <strong>
+            {{ reservationDate }}
+          </strong>
+
+        </div>
+
+
+        <div class="confirmation-row">
+
+          <span>
+            Duration
+          </span>
+
+          <strong>
+            {{ reservationDuration }}
+          </strong>
+
+        </div>
+
+
+        <div class="confirmation-row total-row">
+
+          <span>
+            Total
+          </span>
+
+          <strong>
+            {{ price }} DT
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- Confirmation number -->
+
+      <div class="confirmation-number">
+
+        <span>
+          Confirmation number
+        </span>
+
+        <strong>
+          {{ confirmationNumber }}
+        </strong>
+
+      </div>
+
+
+      <!-- Actions -->
+
+      <div class="modal-actions">
+
+        <a
+          routerLink="/spaces"
+          class="primary-modal-btn"
+        >
+          Back to spaces
+        </a>
+
+
+        <button
+          type="button"
+          class="secondary-modal-btn"
+          (click)="closeConfirmation()"
+        >
+          Continue browsing
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

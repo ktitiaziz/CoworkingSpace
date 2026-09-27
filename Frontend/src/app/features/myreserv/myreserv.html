@@ -1,0 +1,432 @@
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+  <div class="logo">
+    Coworking<span>Space</span>
+  </div>
+
+
+  <div class="nav-links">
+
+    <a routerLink="/">
+      Home
+    </a>
+
+    <a routerLink="/spaces">
+      Spaces
+    </a>
+
+    <a routerLink="/my-reservations" class="active">
+      My Reservations
+    </a>
+
+    <a href="#">
+      About
+    </a>
+
+    <button class="login-btn">
+      Login
+    </button>
+
+  </div>
+
+</nav>
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<main class="reservations-page">
+
+
+  <!-- ===================================================
+       HEADER
+  ==================================================== -->
+
+  <section class="page-header">
+
+    <div>
+
+      <p class="eyebrow">
+        YOUR ACCOUNT
+      </p>
+
+      <h1>
+        My reservations
+      </h1>
+
+      <p class="subtitle">
+        Manage your upcoming coworking reservations.
+      </p>
+
+    </div>
+
+
+    <a
+      routerLink="/spaces"
+      class="browse-btn"
+    >
+      + Book a workspace
+    </a>
+
+  </section>
+
+
+  <!-- ===================================================
+       SUMMARY
+  ==================================================== -->
+
+  <section class="stats">
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon purple">
+        📅
+      </div>
+
+      <div>
+
+        <span>
+          Upcoming
+        </span>
+
+        <strong>
+          {{ activeReservations.length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon green">
+        ✓
+      </div>
+
+      <div>
+
+        <span>
+          Confirmed
+        </span>
+
+        <strong>
+          {{ activeReservations.length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon orange">
+        💰
+      </div>
+
+      <div>
+
+        <span>
+          Total
+        </span>
+
+        <strong>
+          {{ getTotal() }} DT
+        </strong>
+
+      </div>
+
+    </div>
+
+
+  </section>
+
+
+  <!-- ===================================================
+       UPCOMING RESERVATIONS
+  ==================================================== -->
+
+  <section class="reservations-section">
+
+    <div class="section-heading">
+
+      <div>
+
+        <p class="section-eyebrow">
+          UPCOMING
+        </p>
+
+        <h2>
+          Your reservations
+        </h2>
+
+      </div>
+
+      <span class="reservation-count">
+        {{ activeReservations.length }} reservations
+      </span>
+
+    </div>
+
+
+    @if (activeReservations.length > 0) {
+
+      <div class="reservation-list">
+
+        @for (
+          reservation of activeReservations;
+          track reservation.id
+        ) {
+
+          <article class="reservation-card">
+
+
+            <!-- =========================================
+                 CARD HEADER
+            ========================================== -->
+
+            <div class="card-top">
+
+
+              <div class="workspace-info">
+
+                <div class="workspace-icon">
+                  🏢
+                </div>
+
+
+                <div>
+
+                  <span class="workspace-type">
+                    {{ reservation.type }}
+                  </span>
+
+                  <h3>
+                    {{ reservation.spaceName }}
+                  </h3>
+
+                  <p>
+                    📍 {{ reservation.location }}
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <span class="status confirmed">
+                ✓ Confirmed
+              </span>
+
+
+            </div>
+
+
+            <!-- =========================================
+                 DETAILS
+            ========================================== -->
+
+            <div class="card-details">
+
+
+              <div class="detail">
+
+                <span>
+                  DATE
+                </span>
+
+                <strong>
+                  {{ reservation.date }}
+                </strong>
+
+              </div>
+
+
+              <div class="detail">
+
+                <span>
+                  SEAT
+                </span>
+
+                <strong>
+                  #{{ reservation.seatNumber }}
+                </strong>
+
+              </div>
+
+
+              <div class="detail">
+
+                <span>
+                  DURATION
+                </span>
+
+                <strong>
+                  {{ reservation.duration }}
+                </strong>
+
+              </div>
+
+
+              <div class="detail">
+
+                <span>
+                  CONFIRMATION
+                </span>
+
+                <strong>
+                  {{ reservation.confirmationNumber }}
+                </strong>
+
+              </div>
+
+
+            </div>
+
+
+            <!-- =========================================
+                 CARD FOOTER
+            ========================================== -->
+
+            <div class="card-footer">
+
+
+              <div class="price">
+
+                <span>
+                  Total
+                </span>
+
+                <strong>
+                  {{ reservation.price }} DT
+                </strong>
+
+              </div>
+
+
+              <button
+                type="button"
+                class="cancel-btn"
+                (click)="cancelReservation(reservation)"
+              >
+                Cancel reservation
+              </button>
+
+
+            </div>
+
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+
+    @if (activeReservations.length === 0) {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          📅
+        </div>
+
+        <h3>
+          No upcoming reservations
+        </h3>
+
+        <p>
+          You don't have any active reservations at the moment.
+        </p>
+
+        <a
+          routerLink="/spaces"
+          class="browse-empty-btn"
+        >
+          Browse workspaces
+        </a>
+
+      </div>
+
+    }
+
+  </section>
+
+
+  <!-- ===================================================
+       CANCELLED
+  ==================================================== -->
+
+  @if (cancelledReservations.length > 0) {
+
+    <section class="cancelled-section">
+
+      <div class="section-heading">
+
+        <div>
+
+          <p class="section-eyebrow">
+            HISTORY
+          </p>
+
+          <h2>
+            Cancelled reservations
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="cancelled-list">
+
+        @for (
+          reservation of cancelledReservations;
+          track reservation.id
+        ) {
+
+          <article class="cancelled-card">
+
+            <div>
+
+              <span>
+                {{ reservation.confirmationNumber }}
+              </span>
+
+              <h3>
+                {{ reservation.spaceName }}
+              </h3>
+
+              <p>
+                {{ reservation.date }}
+                · Seat #{{ reservation.seatNumber }}
+              </p>
+
+            </div>
+
+
+            <span class="status cancelled">
+              Cancelled
+            </span>
+
+          </article>
+
+        }
+
+      </div>
+
+    </section>
+
+  }
+
+
+</main>
