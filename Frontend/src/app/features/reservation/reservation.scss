@@ -1,0 +1,1896 @@
+/* =====================================================
+   BASE
+===================================================== */
+
+:host {
+  display: block;
+  min-height: 100vh;
+
+  background: #f5f5f5;
+  color: #171717;
+
+  font-family: Objective, objective;
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar {
+  height: 72px;
+
+  padding: 0 7%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e7e7e7;
+}
+
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
+}
+
+
+.logo span {
+  color: #635bff;
+}
+
+
+.nav-links {
+  display: flex;
+  align-items: center;
+
+  gap: 30px;
+}
+
+
+.nav-links a {
+  color: #555555;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  transition: color 0.2s ease;
+}
+
+
+.nav-links a:hover {
+  color: #635bff;
+}
+
+
+.login-btn {
+  padding: 10px 20px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #171717;
+  color: #ffffff;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+
+.login-btn:hover {
+  background: #2c2c2c;
+
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.reservation-page {
+  padding: 40px 6% 80px;
+}
+
+
+.back-link {
+  display: inline-block;
+
+  color: #635bff;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  transition: opacity 0.2s ease;
+}
+
+
+.back-link:hover {
+  opacity: 0.75;
+
+  text-decoration: underline;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.reservation-header {
+  margin-top: 30px;
+}
+
+
+.eyebrow {
+  margin: 0 0 10px;
+
+  color: #635bff;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+
+.reservation-header h1 {
+  margin: 0;
+
+  font-size: 46px;
+  line-height: 1.1;
+
+  letter-spacing: -2px;
+}
+
+
+.subtitle {
+  margin: 14px 0 0;
+
+  color: #777777;
+
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+
+/* =====================================================
+   LEGEND
+===================================================== */
+
+.legend {
+  display: flex;
+  align-items: center;
+
+  gap: 25px;
+
+  margin: 28px 0 20px;
+}
+
+
+.legend-item {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #666666;
+
+  font-size: 13px;
+}
+
+
+.legend-seat {
+  width: 18px;
+  height: 18px;
+
+  display: inline-block;
+
+  border-radius: 5px;
+}
+
+
+/* Available */
+
+.legend-seat.available {
+  background: #d5d5d5;
+
+  border: 1px solid #c4c4c4;
+}
+
+
+/* Reserved */
+
+.legend-seat.reserved {
+  background: #ef4444;
+
+  border: 1px solid #dc2626;
+}
+
+
+/* Your reservation */
+
+.legend-seat.mine {
+  background: #22c55e;
+
+  border: 1px solid #16a34a;
+}
+
+
+/* =====================================================
+   MAIN LAYOUT
+===================================================== */
+
+.workspace-layout {
+  display: grid;
+
+  grid-template-columns:
+    minmax(750px, 1fr)
+    320px;
+
+  gap: 24px;
+
+  align-items: start;
+}
+
+
+/* =====================================================
+   FLOOR PLAN
+===================================================== */
+
+.floor-plan {
+  position: relative;
+
+  width: 100%;
+  height: 720px;
+
+  background: #ffffff;
+
+  border: 7px solid #d2d2d2;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =====================================================
+   ARCHITECTURAL GRID
+===================================================== */
+
+.floor-plan::before {
+  content: '';
+
+  position: absolute;
+
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(0, 0, 0, 0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.025) 1px,
+      transparent 1px
+    );
+
+  background-size: 20px 20px;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+/* =====================================================
+   ARCHITECTURAL ROOMS
+===================================================== */
+
+.architect-room {
+  position: absolute;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #fafafa;
+
+  border: 2px solid #c8cdd1;
+
+  color: #85898d;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+
+  z-index: 2;
+}
+
+
+.room-label {
+  font-size: 9px;
+}
+
+
+.room-title {
+  font-size: 10px;
+}
+
+
+.room-subtitle {
+  margin-top: 5px;
+
+  font-size: 7px;
+}
+
+
+/* =====================================================
+   OFFICE
+===================================================== */
+
+.office-room {
+  top: 0;
+  left: 32%;
+
+  width: 135px;
+  height: 125px;
+}
+
+
+/* =====================================================
+   CONFERENCE ROOM
+===================================================== */
+
+.conference-room {
+  top: 0;
+  left: calc(32% + 135px);
+
+  width: 190px;
+  height: 125px;
+}
+
+
+.conference-table {
+  width: 100px;
+  height: 42px;
+
+  margin-top: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #eeeeee;
+
+  border: 2px solid #c6cacc;
+
+  color: #aaa;
+
+  font-size: 6px;
+}
+
+
+/* =====================================================
+   KITCHEN
+===================================================== */
+
+.kitchen {
+  top: 0;
+  right: 0;
+
+  width: 145px;
+  height: 125px;
+}
+
+
+.kitchen-counter {
+  position: absolute;
+
+  top: 18px;
+  right: 12px;
+
+  width: 28px;
+  height: 80px;
+
+  background: #e7e7e7;
+
+  border: 2px solid #c9c9c9;
+}
+
+
+.kitchen-table {
+  width: 55px;
+  height: 35px;
+
+  border-radius: 5px;
+
+  background: #eeeeee;
+
+  border: 2px solid #c9c9c9;
+}
+
+
+/* =====================================================
+   DESK AREAS
+===================================================== */
+
+.desk-zone {
+  position: absolute;
+
+  z-index: 2;
+}
+
+
+.zone-title {
+  position: absolute;
+
+  padding: 4px 7px;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  border-radius: 3px;
+
+  color: #666666;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+
+  z-index: 4;
+}
+
+
+/* =====================================================
+   LEFT TOP DESKS
+===================================================== */
+
+.zone-left-top {
+  top: 15px;
+  left: 15px;
+
+  width: 190px;
+  height: 235px;
+
+  border-right: 2px solid #c9cdd0;
+  border-bottom: 2px solid #c9cdd0;
+}
+
+
+.zone-left-top .zone-title {
+  top: 8px;
+  left: 60px;
+}
+
+
+/* =====================================================
+   DESKS
+===================================================== */
+
+.desk {
+  position: absolute;
+
+  background: #50c493;
+
+  border: 1px solid #3db181;
+}
+
+
+.desk-1 {
+  top: 45px;
+  left: 25px;
+
+  width: 125px;
+  height: 55px;
+}
+
+
+.desk-2 {
+  top: 130px;
+  left: 25px;
+
+  width: 125px;
+  height: 55px;
+}
+
+
+/* =====================================================
+   LEFT MIDDLE
+===================================================== */
+
+.zone-left-middle {
+  top: 270px;
+  left: 15px;
+
+  width: 190px;
+  height: 185px;
+
+  border-right: 2px solid #c9cdd0;
+}
+
+
+.zone-left-middle .zone-title {
+  top: 8px;
+  left: 55px;
+}
+
+
+.desk-3 {
+  top: 45px;
+  left: 25px;
+
+  width: 125px;
+  height: 60px;
+}
+
+
+/* =====================================================
+   WORKSPACE TABLES
+===================================================== */
+
+.workspace-table {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #50c493;
+
+  border: 2px solid #3db181;
+
+  border-radius: 5px;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+
+  z-index: 2;
+}
+
+
+/* =====================================================
+   TABLE A
+===================================================== */
+
+.table-a {
+  top: 175px;
+  left: 29%;
+
+  width: 150px;
+  height: 58px;
+}
+
+
+/* =====================================================
+   TABLE B
+===================================================== */
+
+.table-b {
+  top: 175px;
+  left: 49%;
+
+  width: 150px;
+  height: 58px;
+}
+
+
+/* =====================================================
+   TABLE C
+===================================================== */
+
+.table-c {
+  top: 300px;
+  left: 29%;
+
+  width: 150px;
+  height: 58px;
+}
+
+
+/* =====================================================
+   TABLE D
+===================================================== */
+
+.table-d {
+  top: 300px;
+  left: 49%;
+
+  width: 150px;
+  height: 58px;
+}
+
+
+/* =====================================================
+   TABLE E
+===================================================== */
+
+.table-e {
+  top: 455px;
+  left: 29%;
+
+  width: 125px;
+  height: 58px;
+}
+
+
+/* =====================================================
+   TABLE F
+===================================================== */
+
+.table-f {
+  top: 455px;
+  left: 47%;
+
+  width: 125px;
+  height: 58px;
+}
+
+
+/* =====================================================
+   TABLE G
+===================================================== */
+
+.table-g {
+  top: 575px;
+  left: 40%;
+
+  width: 170px;
+  height: 48px;
+}
+
+
+/* =====================================================
+   RIGHT INDIVIDUAL DESKS
+===================================================== */
+
+.right-desk-area {
+  position: absolute;
+
+  top: 170px;
+  right: 12px;
+
+  width: 145px;
+  height: 285px;
+
+  z-index: 2;
+}
+
+
+.right-desk-area .zone-title {
+  top: -20px;
+  left: 20px;
+}
+
+
+.vertical-desk {
+  position: absolute;
+
+  top: 15px;
+  right: 42px;
+
+  width: 58px;
+  height: 235px;
+
+  background: #50c493;
+
+  border: 1px solid #3db181;
+}
+
+
+/* =====================================================
+   LOUNGE
+===================================================== */
+
+.lounge {
+  position: absolute;
+
+  left: 15px;
+  bottom: 20px;
+
+  width: 190px;
+  height: 125px;
+
+  border-top: 2px solid #d0d0d0;
+
+  z-index: 2;
+}
+
+
+.lounge > span {
+  position: absolute;
+
+  top: 8px;
+  left: 75px;
+
+  color: #999999;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+
+.sofa {
+  position: absolute;
+
+  width: 60px;
+  height: 30px;
+
+  background: #e7e7e7;
+
+  border: 2px solid #cccccc;
+
+  border-radius: 6px;
+}
+
+
+.sofa-left {
+  top: 45px;
+  left: 15px;
+}
+
+
+.sofa-right {
+  top: 45px;
+  right: 15px;
+}
+
+
+.coffee-table {
+  position: absolute;
+
+  top: 40px;
+  left: 78px;
+
+  width: 35px;
+  height: 35px;
+
+  border-radius: 50%;
+
+  background: #eeeeee;
+
+  border: 2px solid #cccccc;
+}
+
+
+/* =====================================================
+   SMALL MEETING ROOM
+===================================================== */
+
+.small-meeting-room {
+  left: 72%;
+  bottom: 20px;
+
+  width: 160px;
+  height: 120px;
+}
+
+
+.small-table {
+  width: 70px;
+  height: 35px;
+
+  margin-top: 12px;
+
+  border-radius: 50%;
+
+  background: #eeeeee;
+
+  border: 2px solid #c7c7c7;
+}
+
+
+/* =====================================================
+   ENTRANCE
+===================================================== */
+
+.entrance {
+  position: absolute;
+
+  bottom: 0;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 105px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+
+  border-left: 7px solid #d2d2d2;
+  border-right: 7px solid #d2d2d2;
+
+  color: #888888;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+
+  z-index: 10;
+}
+
+
+/* =====================================================
+   SEAT LAYER
+===================================================== */
+
+.seat-layer {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 50;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   SEAT
+===================================================== */
+
+.seat {
+  position: absolute;
+
+  width: 34px;
+  height: 28px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  border: 2px solid transparent;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  pointer-events: auto;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+
+  z-index: 60;
+}
+
+
+/* =====================================================
+   AVAILABLE SEAT
+===================================================== */
+
+.seat.available {
+  background: #d5d5d5;
+
+  border-color: #c4c4c4;
+
+  color: #666666;
+}
+
+
+.seat.available:hover {
+  transform: scale(1.12);
+
+  background: #bbbbbb;
+
+  border-color: #a7a7a7;
+
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.16);
+}
+
+
+.seat.available:active {
+  transform: scale(1.05);
+}
+
+
+/* =====================================================
+   RESERVED SEAT
+===================================================== */
+
+.seat.reserved {
+  background: #ef4444;
+
+  border-color: #dc2626;
+
+  color: #ffffff;
+
+  cursor: not-allowed;
+
+  opacity: 0.95;
+}
+
+
+/* =====================================================
+   YOUR EXISTING SEAT
+===================================================== */
+
+.seat.mine {
+  background: #22c55e;
+
+  border-color: #16a34a;
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 0 4px rgba(34, 197, 94, 0.16);
+}
+
+
+.seat.mine:hover {
+  transform: scale(1.1);
+
+  box-shadow:
+    0 0 0 5px rgba(34, 197, 94, 0.18),
+    0 5px 14px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =====================================================
+   SELECTED SEAT
+===================================================== */
+
+.seat.selected {
+  background: #635bff !important;
+
+  border-color: #5149e8 !important;
+
+  color: #ffffff;
+
+  transform: scale(1.16);
+
+  box-shadow:
+    0 0 0 5px rgba(99, 91, 255, 0.18),
+    0 8px 20px rgba(0, 0, 0, 0.18);
+
+  z-index: 100;
+}
+
+
+.seat.selected::after {
+  content: '✓';
+
+  position: absolute;
+
+  top: -10px;
+  right: -8px;
+
+  width: 17px;
+  height: 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #635bff;
+
+  color: #ffffff;
+
+  font-size: 9px;
+
+  border: 2px solid #ffffff;
+}
+
+
+/* =====================================================
+   RESERVATION SUMMARY
+===================================================== */
+
+.reservation-summary {
+  padding: 25px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e2e2;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.05);
+
+  position: sticky;
+
+  top: 25px;
+}
+
+
+.summary-label {
+  margin: 0 0 25px;
+
+  color: #888888;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+
+/* =====================================================
+   SELECTED SEAT CARD
+===================================================== */
+
+.selected-seat {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 25px;
+
+  padding: 15px;
+
+  border-radius: 10px;
+
+  background: #f0fdf4;
+
+  border: 1px solid #dcfce7;
+}
+
+
+.selected-icon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 9px;
+
+  background: #22c55e;
+
+  color: #ffffff;
+
+  font-weight: 800;
+}
+
+
+.selected-seat div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+.selected-seat small {
+  color: #777777;
+
+  font-size: 12px;
+}
+
+
+.selected-seat strong {
+  font-size: 16px;
+}
+
+
+/* =====================================================
+   SUMMARY DETAILS
+===================================================== */
+
+.summary-line {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin: 15px 0;
+
+  color: #666666;
+
+  font-size: 14px;
+}
+
+
+.summary-line strong {
+  max-width: 150px;
+
+  overflow: hidden;
+
+  color: #222222;
+
+  font-size: 12px;
+
+  text-align: right;
+
+  text-overflow: ellipsis;
+}
+
+
+.reservation-summary hr {
+  margin: 22px 0;
+
+  border: none;
+
+  border-top: 1px solid #eeeeee;
+}
+
+
+/* =====================================================
+   TOTAL
+===================================================== */
+
+.total {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+
+.total span {
+  color: #555555;
+
+  font-size: 14px;
+}
+
+
+.total strong {
+  font-size: 22px;
+
+  color: #171717;
+}
+
+
+/* =====================================================
+   CONFIRM BUTTON
+===================================================== */
+
+.confirm-btn {
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #635bff;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.confirm-btn:hover {
+  background: #5149e8;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 20px rgba(99, 91, 255, 0.22);
+}
+
+
+.confirm-btn:active {
+  transform: translateY(0);
+}
+
+
+/* =====================================================
+   CHANGE SEAT BUTTON
+===================================================== */
+
+.change-seat-btn {
+  width: 100%;
+
+  margin-top: 10px;
+
+  padding: 11px;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #555555;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+
+.change-seat-btn:hover {
+  background: #f6f6f6;
+
+  border-color: #cfcfcf;
+
+  color: #222222;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.no-seat {
+  padding: 30px 10px;
+
+  text-align: center;
+}
+
+
+.empty-icon {
+  margin-bottom: 15px;
+
+  font-size: 35px;
+}
+
+
+.no-seat h3 {
+  margin: 0 0 8px;
+
+  font-size: 18px;
+}
+
+
+.no-seat p {
+  margin: 0;
+
+  color: #888888;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1250px) {
+
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+
+
+  .reservation-summary {
+    position: static;
+
+    width: 100%;
+
+    max-width: 500px;
+  }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 850px) {
+
+  .reservation-page {
+    padding: 35px 4% 70px;
+  }
+
+
+  .reservation-header h1 {
+    font-size: 40px;
+  }
+
+
+  .workspace-layout {
+    overflow-x: auto;
+  }
+
+
+  .floor-plan {
+    min-width: 850px;
+  }
+
+
+  .reservation-summary {
+    max-width: none;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 650px) {
+
+  .navbar {
+    padding: 0 5%;
+  }
+
+
+  .nav-links {
+    gap: 10px;
+  }
+
+
+  .nav-links a {
+    display: none;
+  }
+
+
+  .reservation-page {
+    padding: 30px 4% 60px;
+  }
+
+
+  .reservation-header {
+    margin-top: 25px;
+  }
+
+
+  .reservation-header h1 {
+    font-size: 34px;
+
+    letter-spacing: -1.5px;
+  }
+
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+
+  .legend {
+    flex-wrap: wrap;
+
+    gap: 15px;
+  }
+
+
+  .legend-item {
+    font-size: 12px;
+  }
+
+
+  .reservation-summary {
+    padding: 20px;
+  }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+  .logo {
+    font-size: 19px;
+  }
+
+
+  .login-btn {
+    padding: 9px 15px;
+
+    font-size: 12px;
+  }
+
+
+  .reservation-header h1 {
+    font-size: 30px;
+  }
+
+
+  .back-link {
+    font-size: 13px;
+  }
+
+}
+/* =====================================================
+   CONFIRMATION MODAL
+===================================================== */
+
+.modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  background: rgba(15, 15, 20, 0.58);
+
+  backdrop-filter: blur(6px);
+
+  animation: modalOverlayIn 0.2s ease;
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.confirmation-modal {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 480px;
+
+  padding: 38px;
+
+  background: #ffffff;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.2);
+
+  text-align: center;
+
+  animation: modalIn 0.25s ease;
+}
+
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
+
+.modal-close {
+  position: absolute;
+
+  top: 16px;
+  right: 16px;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #f3f3f3;
+
+  color: #555555;
+
+  font-size: 22px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+
+.modal-close:hover {
+  background: #e9e9e9;
+
+  color: #111111;
+}
+
+
+/* =====================================================
+   SUCCESS ICON
+===================================================== */
+
+.success-icon {
+  width: 68px;
+  height: 68px;
+
+  margin: 0 auto 20px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+
+  color: #ffffff;
+
+  font-size: 30px;
+  font-weight: 800;
+
+  box-shadow:
+    0 0 0 8px rgba(34, 197, 94, 0.12);
+}
+
+
+/* =====================================================
+   MODAL HEADER
+===================================================== */
+
+.modal-eyebrow {
+  margin: 0 0 8px;
+
+  color: #635bff;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+
+.confirmation-modal h2 {
+  margin: 0;
+
+  color: #171717;
+
+  font-size: 32px;
+
+  line-height: 1.2;
+
+  letter-spacing: -1px;
+}
+
+
+.modal-description {
+  margin: 10px auto 25px;
+
+  max-width: 330px;
+
+  color: #777777;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* =====================================================
+   CONFIRMATION DETAILS
+===================================================== */
+
+.confirmation-details {
+  padding: 5px 0;
+
+  border-top: 1px solid #eeeeee;
+}
+
+
+.confirmation-row {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 13px 0;
+
+  border-bottom: 1px solid #eeeeee;
+
+  font-size: 14px;
+}
+
+
+.confirmation-row span {
+  color: #777777;
+}
+
+
+.confirmation-row strong {
+  color: #222222;
+
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   TOTAL ROW
+===================================================== */
+
+.confirmation-row.total-row {
+  margin-top: 2px;
+
+  border-bottom: none;
+}
+
+
+.total-row span {
+  color: #333333;
+
+  font-weight: 700;
+}
+
+
+.total-row strong {
+  color: #635bff;
+
+  font-size: 20px;
+}
+
+
+/* =====================================================
+   CONFIRMATION NUMBER
+===================================================== */
+
+.confirmation-number {
+  margin-top: 12px;
+
+  padding: 14px;
+
+  border-radius: 9px;
+
+  background: #f6f6ff;
+
+  border: 1px solid #e7e5ff;
+}
+
+
+.confirmation-number span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #777777;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+
+.confirmation-number strong {
+  color: #635bff;
+
+  font-size: 15px;
+
+  letter-spacing: 1px;
+}
+
+
+/* =====================================================
+   MODAL ACTIONS
+===================================================== */
+
+.modal-actions {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin-top: 22px;
+}
+
+
+.primary-modal-btn {
+  width: 100%;
+
+  padding: 13px 18px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border-radius: 9px;
+
+  background: #635bff;
+
+  color: #ffffff;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+
+.primary-modal-btn:hover {
+  background: #5149e8;
+
+  transform: translateY(-1px);
+}
+
+
+.secondary-modal-btn {
+  width: 100%;
+
+  padding: 12px 18px;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #555555;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+
+.secondary-modal-btn:hover {
+  background: #f7f7f7;
+
+  border-color: #cccccc;
+}
+
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes modalOverlayIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+
+}
+
+
+@keyframes modalIn {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(20px)
+      scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =====================================================
+   MODAL RESPONSIVE
+===================================================== */
+
+@media (max-width: 550px) {
+
+  .modal-overlay {
+    padding: 15px;
+  }
+
+
+  .confirmation-modal {
+    padding: 32px 22px;
+
+    border-radius: 16px;
+  }
+
+
+  .confirmation-modal h2 {
+    font-size: 28px;
+  }
+
+
+  .success-icon {
+    width: 60px;
+    height: 60px;
+
+    font-size: 26px;
+  }
+
+}
+
+
+@media (max-width: 380px) {
+
+  .confirmation-modal {
+    padding: 28px 18px;
+  }
+
+
+  .confirmation-modal h2 {
+    font-size: 25px;
+  }
+
+
+  .confirmation-row {
+    font-size: 13px;
+  }
+
+}

@@ -1,0 +1,391 @@
+:host {
+  display: block;
+
+  min-height: 100vh;
+
+  background: #fafafa;
+
+  color: #171717;
+
+  font-family: Objective;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+  height: 72px;
+
+  padding: 0 7%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: white;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.logo span {
+  color: #635bff;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+
+  gap: 32px;
+}
+
+.nav-links a {
+  color: #555;
+
+  text-decoration: none;
+
+  font-size: 15px;
+}
+
+.nav-links a.active {
+  color: #635bff;
+
+  font-weight: 700;
+}
+
+.login-btn {
+  border: none;
+
+  background: #171717;
+
+  color: white;
+
+  padding: 11px 20px;
+
+  border-radius: 8px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.spaces-page {
+  padding: 70px 7% 100px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.page-header {
+  max-width: 700px;
+
+  margin-bottom: 45px;
+}
+
+.eyebrow {
+  margin-bottom: 15px;
+
+  color: #635bff;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+.page-header h1 {
+  margin: 0 0 18px;
+
+  font-size: clamp(40px, 5vw, 58px);
+
+  line-height: 1.1;
+
+  letter-spacing: -2px;
+}
+
+.page-header > p:last-child {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 17px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.filters {
+  display: flex;
+
+  gap: 14px;
+
+  margin-bottom: 45px;
+}
+
+.search-box {
+  flex: 1;
+
+  max-width: 400px;
+
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 15px;
+
+  background: white;
+
+  border: 1px solid #ddd;
+
+  border-radius: 9px;
+}
+
+.search-box input {
+  width: 100%;
+
+  border: none;
+
+  outline: none;
+
+  font-size: 14px;
+}
+
+.filters select {
+  height: 48px;
+
+  padding: 0 15px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 9px;
+
+  background: white;
+
+  color: #444;
+
+  cursor: pointer;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.spaces-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 25px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.space-card {
+  overflow: hidden;
+
+  background: white;
+
+  border: 1px solid #e7e7e7;
+
+  border-radius: 14px;
+
+  transition: 0.2s;
+}
+
+.space-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+.space-image {
+  height: 220px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background: #eee;
+}
+
+.space-image img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.space-type {
+  position: absolute;
+
+  top: 15px;
+  left: 15px;
+
+  padding: 7px 11px;
+
+  border-radius: 20px;
+
+  background: white;
+
+  color: #635bff;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.space-content {
+  padding: 22px;
+}
+
+.space-content h2 {
+  margin: 0 0 8px;
+
+  font-size: 20px;
+}
+
+.location {
+  margin: 0 0 15px;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+.description {
+  min-height: 48px;
+
+  margin: 0 0 20px;
+
+  color: #777;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.space-info {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+
+  color: #555;
+
+  font-size: 13px;
+}
+
+.space-info strong {
+  color: #171717;
+
+  font-size: 15px;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.details-btn {
+  width: 100%;
+
+  padding: 12px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #635bff;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.details-btn:hover {
+  background: #5149e8;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+  .spaces-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .search-box {
+    max-width: none;
+  }
+
+  .spaces-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links a {
+    display: none;
+  }
+
+}

@@ -1,0 +1,616 @@
+<!-- ==========================================
+     NAVBAR
+========================================== -->
+
+<nav class="navbar">
+
+  <div class="logo">
+    Coworking<span>Space</span>
+  </div>
+
+
+  <div class="nav-links">
+
+    <a routerLink="/">
+      Home
+    </a>
+
+    <a routerLink="/spaces">
+      Spaces
+    </a>
+
+    <a href="#">
+      About
+    </a>
+
+
+    <button
+      class="login-btn"
+      type="button"
+      (click)="openLogin()"
+    >
+      Login
+    </button>
+
+  </div>
+
+</nav>
+
+
+
+<!-- ==========================================
+     SPACE EXISTS
+========================================== -->
+
+@if (space) {
+
+  <main class="details-page">
+
+
+    <!-- ========================================
+         BACK
+    ========================================= -->
+
+    <a
+      routerLink="/spaces"
+      class="back-link"
+    >
+      ← Back to spaces
+    </a>
+
+
+
+    <!-- ========================================
+         MAIN DETAILS
+    ========================================= -->
+
+    <section class="details-container">
+
+
+      <!-- ======================================
+           IMAGE
+      ======================================= -->
+
+      <div class="details-image">
+
+        <img
+          [src]="space.image"
+          [alt]="space.name"
+        />
+
+
+        <span class="space-type">
+          {{ space.type }}
+        </span>
+
+      </div>
+
+
+
+      <!-- ======================================
+           INFORMATION
+      ======================================= -->
+
+      <div class="details-content">
+
+
+        <p class="eyebrow">
+          {{ space.type }}
+        </p>
+
+
+        <h1>
+          {{ space.name }}
+        </h1>
+
+
+        <p class="location">
+          📍 {{ space.location }}
+        </p>
+
+
+        <p class="description">
+          {{ space.description }}
+        </p>
+
+
+
+        <!-- ====================================
+             INFO
+        ===================================== -->
+
+        <div class="info-grid">
+
+
+          <div class="info-item">
+
+            <span class="info-icon">
+              👥
+            </span>
+
+            <div>
+
+              <small>
+                Capacity
+              </small>
+
+              <strong>
+                {{ space.capacity }} people
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="info-item">
+
+            <span class="info-icon">
+              💰
+            </span>
+
+            <div>
+
+              <small>
+                Price
+              </small>
+
+              <strong>
+                {{ space.price }} DT / day
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="info-item">
+
+            <span class="info-icon">
+              📍
+            </span>
+
+            <div>
+
+              <small>
+                Location
+              </small>
+
+              <strong>
+                {{ space.location }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="info-item">
+
+            <span class="info-icon">
+              ✓
+            </span>
+
+            <div>
+
+              <small>
+                Availability
+              </small>
+
+              <strong>
+                Available
+              </strong>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- ====================================
+             AMENITIES
+        ===================================== -->
+
+        <div class="amenities">
+
+          <h2>
+            Amenities
+          </h2>
+
+
+          <div class="amenity-list">
+
+            <span>
+              📶 High-speed WiFi
+            </span>
+
+            <span>
+              ☕ Coffee & Tea
+            </span>
+
+            <span>
+              ❄️ Air Conditioning
+            </span>
+
+            <span>
+              🔌 Power Outlets
+            </span>
+
+            <span>
+              🪑 Comfortable Chairs
+            </span>
+
+            <span>
+              🖨️ Printer
+            </span>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ====================================
+             RESERVATION
+        ===================================== -->
+
+        <div class="reservation-box">
+
+
+          <div>
+
+            <small>
+              Starting from
+            </small>
+
+
+            <strong>
+
+              {{ space.price }} DT
+
+              <span>
+                / day
+              </span>
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- IMPORTANT:
+               NO routerLink HERE
+          -->
+
+          <button
+            type="button"
+            class="reserve-btn"
+            (click)="openLogin()"
+          >
+
+            Reserve this space
+
+          </button>
+
+
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+  </main>
+
+}
+
+
+
+<!-- ==========================================
+     SPACE NOT FOUND
+========================================== -->
+
+@if (!space) {
+
+  <main class="not-found">
+
+    <h1>
+      Space not found
+    </h1>
+
+
+    <p>
+      The workspace you're looking for doesn't exist.
+    </p>
+
+
+    <a routerLink="/spaces">
+      Back to spaces
+    </a>
+
+  </main>
+
+}
+
+
+
+<!-- ==========================================
+     AUTH MODAL
+========================================== -->
+
+@if (showAuthModal) {
+
+  <div
+    class="auth-overlay"
+    (click)="closeAuthModal()"
+  >
+
+
+    <!-- ======================================
+         MODAL
+    ======================================= -->
+
+    <div
+      class="auth-modal"
+      (click)="$event.stopPropagation()"
+    >
+
+
+      <!-- CLOSE -->
+
+      <button
+        type="button"
+        class="modal-close"
+        (click)="closeAuthModal()"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+
+
+      <!-- ====================================
+           LOGIN
+      ===================================== -->
+
+      @if (authMode === 'login') {
+
+        <div class="auth-content">
+
+
+          <div class="auth-icon">
+            🔐
+          </div>
+
+
+          <p class="auth-eyebrow">
+            WELCOME BACK
+          </p>
+
+
+          <h2>
+            Sign in to continue
+          </h2>
+
+
+          <p class="auth-description">
+
+            You need to be connected to reserve
+            a coworking space.
+
+          </p>
+
+
+
+          <!-- EMAIL -->
+
+          <div class="form-group">
+
+            <label for="login-email">
+              Email
+            </label>
+
+
+            <input
+              id="login-email"
+              type="email"
+              placeholder="you@example.com"
+            />
+
+          </div>
+
+
+
+          <!-- PASSWORD -->
+
+          <div class="form-group">
+
+            <label for="login-password">
+              Password
+            </label>
+
+
+            <input
+              id="login-password"
+              type="password"
+              placeholder="••••••••"
+            />
+
+          </div>
+
+
+
+          <!-- LOGIN -->
+
+          <button
+            type="button"
+            class="auth-submit"
+            (click)="login()"
+          >
+
+            Sign In
+
+          </button>
+
+
+
+          <!-- SWITCH -->
+
+          <p class="auth-switch">
+
+            Don't have an account?
+
+            <button
+              type="button"
+              (click)="openSignup()"
+            >
+              Sign up
+            </button>
+
+          </p>
+
+
+        </div>
+
+      }
+
+
+
+      <!-- ====================================
+           SIGN UP
+      ===================================== -->
+
+      @if (authMode === 'signup') {
+
+        <div class="auth-content">
+
+
+          <div class="auth-icon">
+            ✨
+          </div>
+
+
+          <p class="auth-eyebrow">
+            GET STARTED
+          </p>
+
+
+          <h2>
+            Create your account
+          </h2>
+
+
+          <p class="auth-description">
+
+            Create an account to reserve your
+            favorite coworking spaces.
+
+          </p>
+
+
+
+          <!-- NAME -->
+
+          <div class="form-group">
+
+            <label for="signup-name">
+              Full name
+            </label>
+
+
+            <input
+              id="signup-name"
+              type="text"
+              placeholder="John Doe"
+            />
+
+          </div>
+
+
+
+          <!-- EMAIL -->
+
+          <div class="form-group">
+
+            <label for="signup-email">
+              Email
+            </label>
+
+
+            <input
+              id="signup-email"
+              type="email"
+              placeholder="you@example.com"
+            />
+
+          </div>
+
+
+
+          <!-- PASSWORD -->
+
+          <div class="form-group">
+
+            <label for="signup-password">
+              Password
+            </label>
+
+
+            <input
+              id="signup-password"
+              type="password"
+              placeholder="••••••••"
+            />
+
+          </div>
+
+
+
+          <!-- SIGN UP -->
+
+          <button
+            type="button"
+            class="auth-submit"
+            (click)="signup()"
+          >
+
+            Create Account
+
+          </button>
+
+
+
+          <!-- SWITCH -->
+
+          <p class="auth-switch">
+
+            Already have an account?
+
+            <button
+              type="button"
+              (click)="openLogin()"
+            >
+              Sign in
+            </button>
+
+          </p>
+
+
+        </div>
+
+      }
+
+
+    </div>
+
+  </div>
+
+}

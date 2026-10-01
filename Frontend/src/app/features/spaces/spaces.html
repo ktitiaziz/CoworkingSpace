@@ -1,0 +1,140 @@
+<nav class="navbar">
+
+  <div class="logo">
+    Coworking<span>Space</span>
+  </div>
+
+  <div class="nav-links">
+    <a routerLink="/">Home</a>
+    <a routerLink="/spaces" class="active">Spaces</a>
+    <a href="#">About</a>
+
+    <button class="login-btn">
+      Login
+    </button>
+  </div>
+
+</nav>
+
+
+<main class="spaces-page">
+
+  <!-- Header -->
+
+  <section class="page-header">
+
+    <p class="eyebrow">
+      FIND YOUR SPACE
+    </p>
+
+    <h1>
+      Choose your perfect workspace.
+    </h1>
+
+    <p>
+      Explore our coworking spaces, private offices and
+      meeting rooms.
+    </p>
+
+  </section>
+
+
+  <!-- Filters -->
+
+  <section class="filters">
+
+    <div class="search-box">
+
+      <span>🔍</span>
+
+      <input
+        type="text"
+        placeholder="Search spaces..."
+      />
+
+    </div>
+
+    <select>
+      <option value="">All types</option>
+      <option value="Open Space">Open Space</option>
+      <option value="Private Office">Private Office</option>
+      <option value="Meeting Room">Meeting Room</option>
+    </select>
+
+    <select>
+      <option value="">All locations</option>
+      <option value="Tunis Centre">Tunis Centre</option>
+      <option value="Lac 1">Lac 1</option>
+      <option value="Lac 2">Lac 2</option>
+      <option value="El Menzah">El Menzah</option>
+    </select>
+
+  </section>
+
+
+  <!-- Spaces -->
+
+  <section class="spaces-grid">
+
+    @for (space of spaces; track space.id) {
+
+      <article class="space-card">
+
+        <div class="space-image">
+
+          <img
+            [src]="space.image"
+            [alt]="space.name"
+          />
+
+          <span class="space-type">
+            {{ space.type }}
+          </span>
+
+        </div>
+
+
+        <div class="space-content">
+
+          <h2>
+            {{ space.name }}
+          </h2>
+
+          <p class="location">
+            📍 {{ space.location }}
+          </p>
+
+          <p class="description">
+            {{ space.description }}
+          </p>
+
+
+          <div class="space-info">
+
+            <span>
+              👥 {{ space.capacity }} seats
+            </span>
+
+            <strong>
+              {{ space.price }} DT / day
+            </strong>
+
+          </div>
+
+
+         <button 
+                class="details-btn"
+                [routerLink]="['/spaces', space.id]"
+        >
+        View Details
+        </button>
+
+        </div>
+
+      </article>
+
+    }
+
+  </section>
+
+</main>
