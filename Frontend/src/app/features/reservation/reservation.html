@@ -1,769 +1,382 @@
-<!-- =====================================================
-     NAVBAR
-===================================================== -->
+<!-- NAVBAR -->
 
 <nav class="navbar">
-
-  <div class="logo">
-    Coworking<span>Space</span>
-  </div>
-
+  <div class="logo">Coworking<span>Space</span></div>
 
   <div class="nav-links">
-
-    <a routerLink="/">
-      Home
-    </a>
-
-    <a routerLink="/spaces">
-      Spaces
-    </a>
-
-    <a href="#">
-      About
-    </a>
-
-    <button
-      type="button"
-      class="login-btn"
-    >
-      Login
-    </button>
-
+    <a routerLink="/">Home</a>
+    <a routerLink="/spaces">Spaces</a>
+    <a routerLink="/reservations">My Reservations</a>
+    <a href="#">About</a>
+    <button class="login-btn">Login</button>
   </div>
-
 </nav>
 
 
-
-<!-- =====================================================
-     PAGE
-===================================================== -->
+<!-- PAGE -->
 
 <main class="reservation-page">
 
-
-  <!-- BACK -->
-
-  <a
-    class="back-link"
-    [routerLink]="['/spaces', spaceId]"
-  >
+  <a class="back-link" [routerLink]="['/spaces', spaceId]">
     ← Back to workspace
   </a>
 
-
-
-  <!-- ===================================================
-       HEADER
-  ==================================================== -->
-
   <section class="reservation-header">
-
     <div>
-
-      <p class="eyebrow">
-        RESERVE YOUR SPACE
-      </p>
-
-      <h1>
-        Choose your seat.
-      </h1>
-
+      <p class="eyebrow">RESERVE YOUR SPACE</p>
+      <h1>Choose your seat.</h1>
       <p class="subtitle">
-        Select an available seat from the workspace floor plan.
+        Select an available seat from the {{ currentLayout.name }} floor plan.
       </p>
-
     </div>
-
   </section>
 
 
-
-  <!-- ===================================================
-       LEGEND
-  ==================================================== -->
+  <!-- LEGEND -->
 
   <div class="legend">
-
     <div class="legend-item">
-
       <span class="legend-seat available"></span>
-
-      <span>
-        Available
-      </span>
-
+      <span>Available</span>
     </div>
 
-
     <div class="legend-item">
-
       <span class="legend-seat reserved"></span>
-
-      <span>
-        Reserved
-      </span>
-
+      <span>Reserved</span>
     </div>
-
 
     <div class="legend-item">
-
       <span class="legend-seat mine"></span>
-
-      <span>
-        Your reservation
-      </span>
-
+      <span>Your reservation</span>
     </div>
 
+    <div class="legend-item">
+      <span class="legend-seat selected"></span>
+      <span>Selected</span>
+    </div>
+
+    <span class="legend-count">
+      {{ availableCount }} of {{ currentLayout.seats.length }} seats free
+    </span>
   </div>
 
 
-
-  <!-- ===================================================
-       WORKSPACE + SUMMARY
-  ==================================================== -->
-
   <section class="workspace-layout">
 
-
-    <!-- =================================================
-         FLOOR PLAN
-    ================================================== -->
+    <!-- FLOOR PLAN -->
 
     <div class="floor-plan">
 
+      <svg
+        class="plan"
+        viewBox="0 0 1000 640"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        [attr.aria-label]="currentLayout.name + ' floor plan'"
+      >
 
-      <!-- ===============================================
-           OFFICE
-      ================================================ -->
+        <defs>
+          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M20 0 H0 V20" class="grid-line" />
+          </pattern>
 
-      <div class="architect-room office-room">
+          <pattern id="stairs-pat" width="100" height="12" patternUnits="userSpaceOnUse">
+            <rect width="100" height="12" class="stairs-bg" />
+            <line x1="0" y1="11" x2="100" y2="11" class="stairs-line" />
+          </pattern>
+        </defs>
 
-        <span class="room-label">
-          OFFICE 57
-        </span>
+        <!-- floor -->
+        <rect x="0" y="0" width="1000" height="640" class="floor" />
+        <rect x="0" y="0" width="1000" height="640" fill="url(#grid)" />
 
-      </div>
 
+        <!-- FURNITURE -->
 
+        @for (f of currentLayout.furniture; track $index) {
 
-      <!-- ===============================================
-           CONFERENCE ROOM
-      ================================================ -->
+          <g [attr.transform]="'translate(' + f.x + ' ' + f.y + ') rotate(' + (f.rot ?? 0) + ')'">
 
-      <div class="architect-room conference-room">
+            @switch (f.type) {
 
-        <span class="room-title">
-          NEWTON
-        </span>
+              @case ('table') {
+                <rect class="table" [attr.width]="f.w" [attr.height]="f.h" rx="4" />
+              }
 
-        <span class="room-subtitle">
-          CONFERENCE ROOM
-        </span>
+              @case ('meeting-table') {
+                <rect class="meeting" [attr.width]="f.w" [attr.height]="f.h" rx="26" />
+                <rect class="meeting-inner" x="9" y="9" [attr.width]="f.w - 18" [attr.height]="f.h - 18" rx="18" />
+              }
 
+              @case ('round-table') {
+                <ellipse class="round" [attr.cx]="f.w / 2" [attr.cy]="f.h / 2" [attr.rx]="f.w / 2" [attr.ry]="f.h / 2" />
+              }
 
-        <div class="conference-table">
-          MEETING
-        </div>
+              @case ('pouf') {
+                <ellipse class="pouf" [attr.cx]="f.w / 2" [attr.cy]="f.h / 2" [attr.rx]="f.w / 2" [attr.ry]="f.h / 2" />
+              }
 
-      </div>
+              @case ('sofa') {
+                <rect class="sofa" [attr.width]="f.w" [attr.height]="f.h" rx="9" />
+                <rect class="sofa-cushion" x="5" y="5" [attr.width]="f.w - 10" [attr.height]="f.h - 10" rx="6" />
+              }
 
+              @case ('counter') {
+                <rect class="counter" [attr.width]="f.w" [attr.height]="f.h" rx="3" />
+              }
 
+              @case ('board') {
+                <rect class="board" [attr.width]="f.w" [attr.height]="f.h" rx="2" />
+              }
 
-      <!-- ===============================================
-           KITCHEN
-      ================================================ -->
+              @case ('rug') {
+                <rect class="rug" [attr.width]="f.w" [attr.height]="f.h" rx="14" />
+              }
 
-      <div class="architect-room kitchen">
+              @case ('zone') {
+                <rect class="zone" [attr.width]="f.w" [attr.height]="f.h" />
+              }
 
-        <span class="room-label">
-          KITCHEN
-        </span>
+              @case ('stairs') {
+                <rect class="stairs" [attr.width]="f.w" [attr.height]="f.h" fill="url(#stairs-pat)" />
+              }
 
+              @case ('window') {
+                <rect class="window" [attr.width]="f.w" [attr.height]="f.h" rx="1" />
+              }
 
-        <div class="kitchen-counter"></div>
+              @case ('plant') {
+                <circle class="plant" [attr.cx]="f.w / 2" [attr.cy]="f.h / 2" [attr.r]="f.w / 2" />
+                <circle class="plant-core" [attr.cx]="f.w / 2" [attr.cy]="f.h / 2" [attr.r]="f.w / 5" />
+              }
 
-        <div class="kitchen-table"></div>
+              @case ('chair') {
+                <rect class="c-body" x="-9" y="-11" width="16" height="22" rx="7" />
+                <rect class="c-back" x="5" y="-11" width="5" height="22" rx="2.5" />
+              }
 
-      </div>
+              @case ('label') {
+                <text class="room-label" x="0" y="0">{{ f.label }}</text>
+              }
 
+              @case ('tag') {
+                <text class="room-tag" x="0" y="0">{{ f.label }}</text>
+              }
+            }
 
+            @if (f.label && f.type !== 'label' && f.type !== 'tag') {
+              <text class="furn-label" [attr.x]="f.w / 2" [attr.y]="f.h / 2">{{ f.label }}</text>
+            }
 
-      <!-- ===============================================
-           LEFT TOP DESKS
-      ================================================ -->
+          </g>
+        }
 
-      <div class="desk-zone zone-left-top">
 
-        <span class="zone-title">
-          DESK AREA
-        </span>
+        <!-- WALLS -->
 
+        <rect x="10" y="10" width="980" height="620" class="wall outer" />
 
-        <div class="desk desk-1"></div>
+        @for (w of currentLayout.walls; track $index) {
+          <line
+            class="wall"
+            [class.glass]="w.glass"
+            [attr.x1]="w.x1" [attr.y1]="w.y1"
+            [attr.x2]="w.x2" [attr.y2]="w.y2"
+          />
+        }
 
-        <div class="desk desk-2"></div>
 
-      </div>
+        <!-- DOORS -->
 
+        @for (d of currentLayout.doors; track $index) {
+          <path class="door-gap" [attr.d]="d.gap" />
+          <path class="door-leaf" [attr.d]="d.leaf" />
+          <path class="door-arc" [attr.d]="d.arc" />
+        }
 
 
-      <!-- ===============================================
-           LEFT MIDDLE
-      ================================================ -->
+        <!-- ENTRANCE -->
 
-      <div class="desk-zone zone-left-middle">
+        <path class="door-gap" d="M440 630 H560" />
+        <path class="entrance-mark" d="M440 622 V638 M560 622 V638" />
+        <path class="entrance-arrow" d="M500 604 V586 M493 593 L500 585 L507 593" />
+        <text class="entrance-label" x="500" y="618">ENTRY</text>
 
-        <span class="zone-title">
-          DESK AREA
-        </span>
 
+        <!-- SEATS -->
 
-        <div class="desk desk-3"></div>
+        @for (seat of currentLayout.seats; track seat.id) {
 
-      </div>
-
-
-
-      <!-- ===============================================
-           TABLE A
-      ================================================ -->
-
-      <div class="workspace-table table-a">
-
-        <span>
-          TABLE A
-        </span>
-
-      </div>
-
-
-
-      <!-- ===============================================
-           TABLE B
-      ================================================ -->
-
-      <div class="workspace-table table-b">
-
-        <span>
-          TABLE B
-        </span>
-
-      </div>
-
-
-
-      <!-- ===============================================
-           TABLE C
-      ================================================ -->
-
-      <div class="workspace-table table-c">
-
-        <span>
-          TABLE C
-        </span>
-
-      </div>
-
-
-
-      <!-- ===============================================
-           TABLE D
-      ================================================ -->
-
-      <div class="workspace-table table-d">
-
-        <span>
-          TABLE D
-        </span>
-
-      </div>
-
-
-
-      <!-- ===============================================
-           TABLE E
-      ================================================ -->
-
-      <div class="workspace-table table-e">
-
-        <span>
-          TABLE E
-        </span>
-
-      </div>
-
-
-
-      <!-- ===============================================
-           TABLE F
-      ================================================ -->
-
-      <div class="workspace-table table-f">
-
-        <span>
-          TABLE F
-        </span>
-
-      </div>
-
-
-
-      <!-- ===============================================
-           TABLE G
-      ================================================ -->
-
-      <div class="workspace-table table-g">
-
-        <span>
-          TABLE G
-        </span>
-
-      </div>
-
-
-
-      <!-- ===============================================
-           INDIVIDUAL DESKS
-      ================================================ -->
-
-      <div class="right-desk-area">
-
-        <span class="zone-title">
-          INDIVIDUAL DESKS
-        </span>
-
-
-        <div class="vertical-desk"></div>
-
-      </div>
-
-
-
-      <!-- ===============================================
-           LOUNGE
-      ================================================ -->
-
-      <div class="lounge">
-
-        <span>
-          LOUNGE
-        </span>
-
-
-        <div class="sofa sofa-left"></div>
-
-        <div class="sofa sofa-right"></div>
-
-        <div class="coffee-table"></div>
-
-      </div>
-
-
-
-      <!-- ===============================================
-           SMALL MEETING ROOM
-      ================================================ -->
-
-      <div class="architect-room small-meeting-room">
-
-        <span>
-          MEETING ROOM
-        </span>
-
-
-        <div class="small-table"></div>
-
-      </div>
-
-
-
-      <!-- ===============================================
-           ENTRANCE
-      ================================================ -->
-
-      <div class="entrance">
-        ENTRANCE
-      </div>
-
-
-
-      <!-- ===============================================
-           SEATS
-      ================================================ -->
-
-      <div class="seat-layer">
-
-        @for (seat of seats; track seat.id) {
-
-          <button
-            type="button"
+          <g
             class="seat"
-
+            role="button"
+            [attr.tabindex]="seat.status === 'reserved' ? -1 : 0"
+            [attr.aria-label]="'Seat ' + seat.number + ', ' + seat.status"
+            [attr.aria-disabled]="seat.status === 'reserved'"
             [class.available]="seat.status === 'available'"
             [class.reserved]="seat.status === 'reserved'"
             [class.mine]="seat.status === 'mine'"
-            [class.selected]="isSelected(seat)"
-
-            [style.top]="seat.position.top"
-            [style.left]="seat.position.left"
-            [style.right]="seat.position.right"
-
-            [disabled]="seat.status === 'reserved'"
-
-            [attr.aria-label]="'Seat ' + seat.number"
-
+            [class.selected]="selectedSeat?.id === seat.id"
+            [attr.transform]="'translate(' + seat.x + ' ' + seat.y + ') rotate(' + seat.rot + ')'"
             (click)="selectSeat(seat)"
+            (keydown.enter)="selectSeat(seat)"
+            (keydown.space)="selectSeat(seat); $event.preventDefault()"
           >
+            <g class="unit">
 
-            {{ seat.number }}
+              @if (seat.kind === 'desk') {
+                <rect class="s-desk" x="-14" y="-20" width="28" height="40" rx="3" />
+                <rect class="s-body" x="16" y="-11" width="16" height="22" rx="7" />
+                <rect class="s-back" x="30" y="-11" width="5" height="22" rx="2.5" />
+                <text class="s-num" x="0" y="0" [attr.transform]="'rotate(' + (-seat.rot) + ' 0 0)'">{{ seat.number }}</text>
+              } @else {
+                <rect class="s-body" x="-9" y="-11" width="16" height="22" rx="7" />
+                <rect class="s-back" x="5" y="-11" width="5" height="22" rx="2.5" />
+                <text class="s-num" x="-2" y="0" [attr.transform]="'rotate(' + (-seat.rot) + ' -2 0)'">{{ seat.number }}</text>
+              }
 
-          </button>
-
+            </g>
+          </g>
         }
 
-      </div>
+      </svg>
 
     </div>
 
 
-
-    <!-- =================================================
-         RESERVATION SUMMARY
-    ================================================== -->
+    <!-- RESERVATION SUMMARY -->
 
     <aside class="reservation-summary">
 
-
-      <p class="summary-label">
-        YOUR RESERVATION
-      </p>
-
-
+      <p class="summary-label">YOUR RESERVATION</p>
 
       @if (selectedSeat) {
 
-
-        <!-- ============================================
-             SELECTED SEAT
-        ============================================= -->
-
         <div class="selected-seat">
-
-          <span class="selected-icon">
-            ✓
-          </span>
-
-
+          <span class="selected-icon">✓</span>
           <div>
-
-            <small>
-              Selected seat
-            </small>
-
-            <strong>
-              Seat {{ selectedSeat.number }}
-            </strong>
-
+            <small>Selected seat</small>
+            <strong>Seat {{ selectedSeat.number }}</strong>
           </div>
-
         </div>
-
-
-
-        <!-- ============================================
-             DETAILS
-        ============================================= -->
 
         <div class="summary-line">
-
-          <span>
-            Workspace
-          </span>
-
-          <strong>
-            {{ workspaceName }}
-          </strong>
-
+          <span>Workspace</span>
+          <strong>{{ currentLayout.name }}</strong>
         </div>
-
 
         <div class="summary-line">
-
-          <span>
-            Duration
-          </span>
-
-          <span>
-            1 day
-          </span>
-
+          <span>Type</span>
+          <strong>{{ currentLayout.type }}</strong>
         </div>
-
 
         <div class="summary-line">
-
-          <span>
-            Seat
-          </span>
-
-          <span>
-            #{{ selectedSeat.number }}
-          </span>
-
+          <span>Seat</span>
+          <span>#{{ selectedSeat.number }}</span>
         </div>
-
 
         <div class="summary-line">
-
-          <span>
-            Access
-          </span>
-
-          <span>
-            Full day
-          </span>
-
+          <span>Duration</span>
+          <span>1 day</span>
         </div>
-
-
 
         <hr>
 
-
-
-        <!-- ============================================
-             TOTAL
-        ============================================= -->
-
         <div class="total">
-
-          <span>
-            Total
-          </span>
-
-          <strong>
-            {{ workspacePrice }} DT
-          </strong>
-
+          <span>Total</span>
+          <strong>{{ currentLayout.price }} DT</strong>
         </div>
 
-
-
-        <!-- ============================================
-             CONFIRM
-        ============================================= -->
-
-       <button
-  type="button"
-  class="confirm-btn"
-  (click)="confirmReservation()"
->
-  Confirm Reservation
-</button>
-        
-        <!-- CHANGE SEAT -->
-
-        <button
-          type="button"
-          class="change-seat-btn"
-          (click)="selectedSeat = null"
-        >
-
-          Change seat
-
+        <button type="button" class="confirm-btn" (click)="confirmReservation()">
+          Confirm Reservation
         </button>
-
 
       } @else {
 
-
-        <!-- ============================================
-             NO SEAT
-        ============================================= -->
-
         <div class="no-seat">
-
-          <div class="empty-icon">
-            🪑
-          </div>
-
-
-          <h3>
-            No seat selected
-          </h3>
-
-
-          <p>
-            Select an available seat from the
-            floor plan to continue.
-          </p>
-
+          <div class="empty-icon">🪑</div>
+          <h3>No seat selected</h3>
+          <p>Select an available seat from the floor plan to continue.</p>
         </div>
 
       }
 
-
     </aside>
-
 
   </section>
 
 </main>
-<!-- =====================================================
-     CONFIRMATION MODAL
-===================================================== -->
 
-@if (showConfirmation) {
+<!-- CONFIRMATION POPUP -->
 
-  <div class="modal-overlay">
+@if (showConfirmation && confirmedSeat) {
 
-    <div class="confirmation-modal">
+  <div class="modal-backdrop" (click)="closeConfirmation()">
 
-      <!-- Close -->
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-title"
+      (click)="$event.stopPropagation()"
+    >
 
       <button
         type="button"
         class="modal-close"
-        (click)="closeConfirmation()"
         aria-label="Close"
-      >
-        ×
-      </button>
+        (click)="closeConfirmation()"
+      >✕</button>
 
+      <div class="modal-check"><span>✓</span></div>
 
-      <!-- Success icon -->
+      <p class="modal-eyebrow">RESERVATION CONFIRMED</p>
 
-      <div class="success-icon">
-        ✓
-      </div>
+      <h2 id="confirm-title">You're all set!</h2>
 
-
-      <!-- Header -->
-
-      <p class="modal-eyebrow">
-        RESERVATION CONFIRMED
-      </p>
-
-      <h2>
-        You're all set!
-      </h2>
-
-      <p class="modal-description">
+      <p class="modal-text">
         Your workspace has been successfully reserved.
       </p>
 
-
-      <!-- Reservation details -->
-
-      <div class="confirmation-details">
-
-        <div class="confirmation-row">
-
-          <span>
-            Workspace
-          </span>
-
-          <strong>
-            CoworkingSpace
-          </strong>
-
+      <div class="modal-rows">
+        <div class="modal-row">
+          <span>Workspace</span>
+          <strong>{{ currentLayout.name }}</strong>
         </div>
 
-
-        <div class="confirmation-row">
-
-          <span>
-            Seat
-          </span>
-
-          <strong>
-            #{{ selectedSeat?.number }}
-          </strong>
-
+        <div class="modal-row">
+          <span>Seat</span>
+          <strong>#{{ confirmedSeat.number }}</strong>
         </div>
 
-
-        <div class="confirmation-row">
-
-          <span>
-            Date
-          </span>
-
-          <strong>
-            {{ reservationDate }}
-          </strong>
-
+        <div class="modal-row">
+          <span>Date</span>
+          <strong>Today</strong>
         </div>
 
-
-        <div class="confirmation-row">
-
-          <span>
-            Duration
-          </span>
-
-          <strong>
-            {{ reservationDuration }}
-          </strong>
-
+        <div class="modal-row">
+          <span>Duration</span>
+          <strong>1 day</strong>
         </div>
 
-
-        <div class="confirmation-row total-row">
-
-          <span>
-            Total
-          </span>
-
-          <strong>
-            {{ price }} DT
-          </strong>
-
+        <div class="modal-row total-row">
+          <span>Total</span>
+          <strong>{{ currentLayout.price }} DT</strong>
         </div>
-
       </div>
 
-
-      <!-- Confirmation number -->
-
-      <div class="confirmation-number">
-
-        <span>
-          Confirmation number
-        </span>
-
-        <strong>
-          {{ confirmationNumber }}
-        </strong>
-
+      <div class="modal-code">
+        <small>Confirmation number</small>
+        <strong>{{ confirmationNumber }}</strong>
       </div>
 
+      <button type="button" class="modal-primary" (click)="goToSpaces()">
+        Back to spaces
+      </button>
 
-      <!-- Actions -->
-
-      <div class="modal-actions">
-
-        <a
-          routerLink="/spaces"
-          class="primary-modal-btn"
-        >
-          Back to spaces
-        </a>
-
-
-        <button
-          type="button"
-          class="secondary-modal-btn"
-          (click)="closeConfirmation()"
-        >
-          Continue browsing
-        </button>
-
-      </div>
+      <button type="button" class="modal-secondary" (click)="closeConfirmation()">
+        Continue browsing
+      </button>
 
     </div>
 

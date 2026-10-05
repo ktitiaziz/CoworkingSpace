@@ -130,6 +130,10 @@
 
 .primary-btn,
 .secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   padding: 14px 24px;
 
   border-radius: 9px;
@@ -137,10 +141,16 @@
   font-size: 15px;
   font-weight: 700;
 
+  text-decoration: none;
+
   cursor: pointer;
 
-  transition: 0.2s;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
+
 
 .primary-btn {
   border: none;
@@ -148,23 +158,36 @@
   background: #635bff;
   color: white;
 
-  box-shadow: 0 8px 20px rgba(99, 91, 255, 0.2);
+  box-shadow:
+    0 8px 20px rgba(99, 91, 255, 0.2);
 }
 
+
 .primary-btn:hover {
+  color: white;
+
   transform: translateY(-2px);
+
+  background: #5149e8;
 }
+
 
 .secondary-btn {
   background: white;
+
   border: 1px solid #ddd;
+
   color: #333;
 }
 
-.secondary-btn:hover {
-  border-color: #635bff;
-}
 
+.secondary-btn:hover {
+  color: #635bff;
+
+  border-color: #635bff;
+
+  transform: translateY(-2px);
+}
 
 /* =========================
    HERO CARD

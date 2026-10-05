@@ -9,7 +9,7 @@
     <a routerLink="/spaces" class="active">Spaces</a>
     <a href="#">About</a>
 
-    <button class="login-btn">
+    <button type="button" class="login-btn">
       Login
     </button>
   </div>
@@ -122,11 +122,12 @@
           </div>
 
 
-         <button 
-                class="details-btn"
-                [routerLink]="['/spaces', space.id]"
+        <button
+          type="button"
+          class="details-btn"
+          [routerLink]="['/spaces', space.id]"
         >
-        View Details
+          View Details
         </button>
 
         </div>

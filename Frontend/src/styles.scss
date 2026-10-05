@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+
+button {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
