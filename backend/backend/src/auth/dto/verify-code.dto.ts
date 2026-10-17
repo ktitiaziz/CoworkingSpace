@@ -1,5 +1,6 @@
-import { IsEmail, IsEnum, IsString, Matches, MaxLength } from 'class-validator';
-import { VerificationPurpose } from '../../users/entities/user.entity.js';
+import { IsEmail, IsIn, IsString, Matches, MaxLength } from 'class-validator';
+import { CLIENT_VERIFICATION_PURPOSES } from '../../users/entities/user.entity.js';
+import type { ClientVerificationPurpose } from '../../users/entities/user.entity.js';
 
 export class VerifyCodeDto {
   @IsEmail()
@@ -10,6 +11,6 @@ export class VerifyCodeDto {
   @Matches(/^\d{6}$/, { message: 'code must be exactly 6 digits' })
   code: string;
 
-  @IsEnum(VerificationPurpose)
-  purpose: VerificationPurpose;
+  @IsIn(CLIENT_VERIFICATION_PURPOSES)
+  purpose: ClientVerificationPurpose;
 }

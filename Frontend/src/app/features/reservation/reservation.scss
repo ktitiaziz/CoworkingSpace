@@ -5,56 +5,8 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: #f6f6f7;
+  background: var(--bg);
   color: #171717;
-  font-family: objective;
-}
-
-
-/* =====================================================
-   NAVBAR
-===================================================== */
-
-.navbar {
-  height: 72px;
-  padding: 0 7%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #ffffff;
-  border-bottom: 1px solid #e7e7e7;
-}
-
-.logo {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-
-  span { color: #635bff; }
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-
-  a {
-    color: #555;
-    text-decoration: none;
-    font-size: 14px;
-
-    &:hover { color: #635bff; }
-  }
-}
-
-.login-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: #171717;
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 
@@ -67,7 +19,7 @@
 }
 
 .back-link {
-  color: #635bff;
+  color: var(--brand);
   text-decoration: none;
   font-size: 14px;
   font-weight: 700;
@@ -79,7 +31,7 @@
 
 .eyebrow {
   margin: 0 0 8px;
-  color: #635bff;
+  color: var(--brand);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.5px;
@@ -127,7 +79,7 @@
   }
 
   input:focus-visible {
-    outline: 2px solid #635bff;
+    outline: 2px solid var(--brand);
     outline-offset: 2px;
   }
 }
@@ -160,7 +112,7 @@
   &.available { background: #d9d9e3; border: 1px solid #a2a2b0; }
   &.reserved  { background: #ef4444; }
   &.mine      { background: #22c55e; }
-  &.selected  { background: #635bff; }
+  &.selected  { background: var(--brand); }
 }
 
 .legend-count {
@@ -425,7 +377,7 @@ $floor: #fcfcfd;
     &:hover .s-desk,
     &:hover .s-body { fill: #cfcfdc; }
 
-    &:focus-visible .s-desk { stroke: #635bff; stroke-width: 2.5; }
+    &:focus-visible .s-desk { stroke: var(--brand); stroke-width: 2.5; }
   }
 
   /* reserved = red */
@@ -459,7 +411,7 @@ $floor: #fcfcfd;
 
   /* selected = purple (keep last) */
   &.selected {
-    .s-desk { fill: #635bff; stroke: #4338ca; stroke-width: 2.2; }
+    .s-desk { fill: var(--brand); stroke: #4338ca; stroke-width: 2.2; }
     .s-body { fill: #8b85ff; stroke: #4338ca; stroke-width: 2.2; }
     .s-back { fill: #4f46e5; stroke: #4338ca; stroke-width: 2.2; }
     .s-num  { fill: #fff; }
@@ -518,7 +470,7 @@ $floor: #fcfcfd;
   align-items: center;
   justify-content: center;
   border-radius: 9px;
-  background: #635bff;
+  background: var(--brand);
   color: white;
   font-weight: 800;
 }
@@ -553,7 +505,7 @@ $floor: #fcfcfd;
   margin-bottom: 20px;
 
   strong {
-    color: #635bff;
+    color: var(--brand);
     font-size: 22px;
   }
 }
@@ -563,14 +515,14 @@ $floor: #fcfcfd;
   padding: 14px;
   border: none;
   border-radius: 8px;
-  background: #635bff;
+  background: var(--brand);
   color: white;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.15s ease;
 
   &:hover {
-    background: #5149e8;
+    background: var(--brand-strong);
     transform: translateY(-1px);
   }
 }
@@ -637,15 +589,9 @@ $floor: #fcfcfd;
 }
 
 @media (max-width: 650px) {
-  .navbar {
-    padding: 0 5%;
-  }
+  
 
-  .nav-links {
-    gap: 10px;
-
-    a { display: none; }
-  }
+  
 
   .reservation-header h1 {
     font-size: 32px;
@@ -734,7 +680,7 @@ $floor: #fcfcfd;
 
 .modal-eyebrow {
   margin: 8px 0 6px;
-  color: #635bff;
+  color: var(--brand);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.5px;
@@ -781,7 +727,7 @@ $floor: #fcfcfd;
     font-weight: 700;
 
     strong {
-      color: #635bff;
+      color: var(--brand);
       font-size: 18px;
     }
   }
@@ -802,7 +748,7 @@ $floor: #fcfcfd;
   }
 
   strong {
-    color: #635bff;
+    color: var(--brand);
     font-size: 20px;
     letter-spacing: 1px;
   }
@@ -823,10 +769,10 @@ $floor: #fcfcfd;
 .modal-primary {
   margin-bottom: 10px;
   border: none;
-  background: #635bff;
+  background: var(--brand);
   color: #fff;
 
-  &:hover { background: #5149e8; }
+  &:hover { background: var(--brand-strong); }
 }
 
 .modal-secondary {

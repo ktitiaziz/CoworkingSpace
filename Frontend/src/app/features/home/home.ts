@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AccountMenu } from '../../shared/account-menu/account-menu';
+import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, AccountMenu],
+  imports: [RouterLink, Navbar],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })

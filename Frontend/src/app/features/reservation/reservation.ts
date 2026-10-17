@@ -1,8 +1,8 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { AccountMenu } from '../../shared/account-menu/account-menu';
+import { Navbar } from '../../shared/navbar/navbar';
 
 /* =====================================================
    TYPES
@@ -246,7 +246,7 @@ class LayoutBuilder {
 
 @Component({
   selector: 'app-reservation',
-  imports: [RouterLink, AccountMenu],
+  imports: [RouterLink, Navbar],
   templateUrl: './reservation.html',
   styleUrl: './reservation.scss'
 })
@@ -587,7 +587,9 @@ export class Reservation implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    // The app is zoneless: awaited HTTP results must request a re-render explicitly.
+    private cdr: ChangeDetectorRef
   ) {
     this.spaceId = Number(this.route.snapshot.paramMap.get('id'));
     this.currentLayout = this.layouts[this.spaceId] ?? this.layouts[1];
@@ -636,48 +638,51 @@ export class Reservation implements OnInit {
     try {
       // Both GET endpoints are public and return only the fields needed to
       // render seat availability. Browsing and seat selection do not require login.
-      const seats = await firstValueFrom(
-        this.http.get<Array<{ id: number; seatNumber: number }>>(
-          `${this.apiUrl}/seats?spaceId=${this.spaceId}`
-        )
-      );
+      // The three requests are independent, so run them in parallel.
+      type MyReservation = { id: number; status: string; startDate: string; endDate: string; seat?: { id: number } | null };
+      const token = localStorage.getItem('coworking_access_token');
 
-      const reservations = await firstValueFrom(
-        this.http.get<Array<{
-          id: number;
-          status: string;
-          startDate: string;
-          endDate: string;
-          seat?: { id: number; seatNumber: number } | null;
-        }>>(`${this.apiUrl}/reservations/space/${this.spaceId}`, {
-          params: {
-            startDate: this.reservationStartDate,
-            endDate: this.reservationEndDate
-          }
-        })
-      );
+      const [seats, reservations, myReservations] = await Promise.all([
+        firstValueFrom(
+          this.http.get<Array<{ id: number; seatNumber: number }>>(
+            `${this.apiUrl}/seats?spaceId=${this.spaceId}`
+          )
+        ),
+
+        firstValueFrom(
+          this.http.get<Array<{
+            id: number;
+            status: string;
+            startDate: string;
+            endDate: string;
+            seat?: { id: number; seatNumber: number } | null;
+          }>>(`${this.apiUrl}/reservations/space/${this.spaceId}`, {
+            params: {
+              startDate: this.reservationStartDate,
+              endDate: this.reservationEndDate
+            }
+          })
+        ),
+
+        // The public endpoint intentionally hides user identities. When signed in,
+        // compare it with the authenticated user's own reservation list so their
+        // bookings render green while bookings belonging to other accounts render red.
+        token
+          ? firstValueFrom(this.http.get<MyReservation[]>(`${this.apiUrl}/reservations`, {
+              headers: { Authorization: `Bearer ${token}` }
+            })).catch((error: HttpErrorResponse): MyReservation[] => {
+              // Public availability remains usable if a stale token exists.
+              if (error.status === 401) {
+                localStorage.removeItem('coworking_access_token');
+              }
+              return [];
+            })
+          : Promise.resolve<MyReservation[]>([])
+      ]);
 
       const active = reservations.filter(r =>
         r.status !== 'CANCELLED' && !!r.seat
       );
-
-      // The public endpoint intentionally hides user identities. When signed in,
-      // compare it with the authenticated user's own reservation list so their
-      // bookings render green while bookings belonging to other accounts render red.
-      let myReservations: Array<{ id: number; status: string; startDate: string; endDate: string; seat?: { id: number } | null }> = [];
-      const token = localStorage.getItem('coworking_access_token');
-      if (token) {
-        try {
-          myReservations = await firstValueFrom(this.http.get<typeof myReservations>(`${this.apiUrl}/reservations`, {
-            headers: { Authorization: `Bearer ${token}` }
-          }));
-        } catch (error) {
-          // Public availability remains usable if a stale token exists.
-          if ((error as HttpErrorResponse).status === 401) {
-            localStorage.removeItem('coworking_access_token');
-          }
-        }
-      }
       const overlapsSelectedDates = (booking: { startDate: string; endDate: string }) =>
         String(booking.startDate).slice(0, 10) <= this.reservationEndDate &&
         String(booking.endDate).slice(0, 10) >= this.reservationStartDate;
@@ -746,6 +751,7 @@ export class Reservation implements OnInit {
         'Could not load live seat availability. Check that the backend is running and the space has seats configured.';
     } finally {
       this.loadingSeats = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -856,6 +862,7 @@ export class Reservation implements OnInit {
       await this.loadSeatStatus();
     } finally {
       this.savingReservation = false;
+      this.cdr.markForCheck();
     }
   }
 

@@ -1,28 +1,4 @@
-<nav class="navbar">
-
-  <div class="logo">
-    Coworking<span>Space</span>
-  </div>
-
-  <div class="nav-links">
-
-    <a routerLink="/">
-      Home
-    </a>
-
-    <a routerLink="/spaces">
-      Spaces
-    </a>
-
-    <a routerLink="/about">
-      About
-    </a>
-
-    <app-account-menu />
-
-  </div>
-
-</nav>
+<app-navbar />
 
 
 <main>
@@ -33,10 +9,13 @@
 
   <section class="hero">
 
+    <div class="hero-glow" aria-hidden="true"></div>
+
     <div class="hero-content">
 
-      <p class="eyebrow">
-        YOUR SPACE. YOUR WAY.
+      <p class="pill">
+        <span class="pill-dot"></span>
+        Your space. Your way.
       </p>
 
       <h1>
@@ -50,29 +29,31 @@
         just a few clicks.
       </p>
 
-
       <div class="hero-actions">
-
-        <!-- GO TO SPACES -->
-
-        <a
-          routerLink="/spaces"
-          class="primary-btn"
-        >
+        <a routerLink="/spaces" class="primary-btn">
           Explore Spaces
+          <span aria-hidden="true">→</span>
         </a>
 
-
-        <!-- HOW IT WORKS -->
-
-        <a
-          routerLink="/about"
-          class="secondary-btn"
-        >
+        <a routerLink="/" fragment="how-it-works" class="secondary-btn">
           How it works
         </a>
-
       </div>
+
+      <dl class="hero-stats">
+        <div>
+          <dt>Workspaces</dt>
+          <dd>6+</dd>
+        </div>
+        <div>
+          <dt>Neighbourhoods</dt>
+          <dd>5</dd>
+        </div>
+        <div>
+          <dt>From</dt>
+          <dd>12 DT<small>/day</small></dd>
+        </div>
+      </dl>
 
     </div>
 
@@ -81,40 +62,56 @@
          HERO CARD
     ================================================== -->
 
-    <div class="hero-card">
+    <div class="hero-visual">
 
-      <div class="card-image">
+      <div class="hero-card">
 
-        <span>
-          Available today
-        </span>
+        <div class="card-image">
 
-      </div>
-
-
-      <div class="card-content">
-
-        <h3>
-          Modern Workspace
-        </h3>
-
-        <p>
-          Comfortable desks in a quiet environment.
-        </p>
-
-
-        <div class="card-info">
-
-          <span>
-            📍 Tunis
+          <span class="badge">
+            <span class="badge-dot"></span>
+            Available today
           </span>
 
-          <span>
-            👥 12 seats
-          </span>
+          <div class="desk-illustration" aria-hidden="true">
+            <span class="lamp"></span>
+            <span class="screen"></span>
+            <span class="desk"></span>
+            <span class="plant"></span>
+          </div>
 
         </div>
 
+        <div class="card-content">
+
+          <h3>Modern Workspace</h3>
+
+          <p>Comfortable desks in a quiet environment.</p>
+
+          <div class="card-info">
+            <span>📍 Tunis</span>
+            <span>👥 12 seats</span>
+            <strong>15 DT<small>/day</small></strong>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="floating-chip chip-top">
+        <span class="chip-icon">✓</span>
+        <div>
+          <strong>Seat #7 booked</strong>
+          <small>Confirmation sent</small>
+        </div>
+      </div>
+
+      <div class="floating-chip chip-bottom">
+        <span class="chip-icon wifi">📶</span>
+        <div>
+          <strong>High-speed WiFi</strong>
+          <small>In every space</small>
+        </div>
       </div>
 
     </div>
@@ -130,13 +127,9 @@
 
     <div class="section-heading">
 
-      <p class="eyebrow">
-        WHY COWORKINGSPACE?
-      </p>
+      <p class="eyebrow">WHY COWORKINGSPACE?</p>
 
-      <h2>
-        Everything you need to work better.
-      </h2>
+      <h2>Everything you need to work better.</h2>
 
       <p>
         Flexible workspaces designed for individuals,
@@ -148,67 +141,74 @@
 
     <div class="feature-grid">
 
-
-      <!-- FEATURE 1 -->
-
       <div class="feature-card">
-
-        <div class="feature-icon">
-          🏢
-        </div>
-
-        <h3>
-          Modern Spaces
-        </h3>
-
+        <div class="feature-icon">🏢</div>
+        <h3>Modern Spaces</h3>
         <p>
           Professional and comfortable environments
           designed for productive work.
         </p>
-
       </div>
 
-
-      <!-- FEATURE 2 -->
-
       <div class="feature-card">
-
-        <div class="feature-icon">
-          📅
-        </div>
-
-        <h3>
-          Easy Booking
-        </h3>
-
+        <div class="feature-icon">📅</div>
+        <h3>Easy Booking</h3>
         <p>
           Find an available workspace and reserve it
           in just a few clicks.
         </p>
-
       </div>
 
-
-      <!-- FEATURE 3 -->
-
       <div class="feature-card">
-
-        <div class="feature-icon">
-          💻
-        </div>
-
-        <h3>
-          Flexible Work
-        </h3>
-
+        <div class="feature-icon">💻</div>
+        <h3>Flexible Work</h3>
         <p>
           Choose desks, private offices or meeting
           rooms depending on your needs.
         </p>
-
       </div>
 
     </div>
+
+  </section>
+
+
+  <!-- ===================================================
+       HOW IT WORKS
+  ==================================================== -->
+
+  <section class="steps" id="how-it-works">
+
+    <div class="section-heading centered">
+
+      <p class="eyebrow">HOW IT WORKS</p>
+
+      <h2>Book your desk in three steps.</h2>
+
+    </div>
+
+
+    <ol class="step-list">
+
+      <li>
+        <span class="step-number">1</span>
+        <h3>Pick a space</h3>
+        <p>Browse open spaces, private offices and meeting rooms across Tunis.</p>
+      </li>
+
+      <li>
+        <span class="step-number">2</span>
+        <h3>Choose your seat</h3>
+        <p>Select your dates and pick any free seat right on the floor plan.</p>
+      </li>
+
+      <li>
+        <span class="step-number">3</span>
+        <h3>Show up and work</h3>
+        <p>Get an instant confirmation number and manage it from your account.</p>
+      </li>
+
+    </ol>
 
   </section>
 
@@ -221,13 +221,9 @@
 
     <div>
 
-      <p class="eyebrow">
-        READY TO WORK?
-      </p>
+      <p class="eyebrow">READY TO WORK?</p>
 
-      <h2>
-        Find your workspace today.
-      </h2>
+      <h2>Find your workspace today.</h2>
 
       <p>
         Explore available spaces and make your next
@@ -236,12 +232,9 @@
 
     </div>
 
-
-    <a
-      routerLink="/spaces"
-      class="primary-btn"
-    >
+    <a routerLink="/spaces" class="primary-btn light">
       Explore Spaces
+      <span aria-hidden="true">→</span>
     </a>
 
   </section>
@@ -259,8 +252,12 @@
     Coworking<span>Space</span>
   </div>
 
-  <p>
-    © 2026 CoworkingSpace. All rights reserved.
-  </p>
+  <nav class="footer-links" aria-label="Footer">
+    <a routerLink="/spaces">Spaces</a>
+    <a routerLink="/my-reservations">My Reservations</a>
+    <a routerLink="/auth" [queryParams]="{ mode: 'signup' }">Create account</a>
+  </nav>
+
+  <p>© 2026 CoworkingSpace. All rights reserved.</p>
 
 </footer>

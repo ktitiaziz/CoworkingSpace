@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AccountMenu } from '../../shared/account-menu/account-menu';
+import { Navbar } from '../../shared/navbar/navbar';
 
 interface CoworkingSpace {
   id: number;
@@ -15,13 +15,16 @@ interface CoworkingSpace {
 
 @Component({
   selector: 'app-space-details',
-  imports: [RouterLink, AccountMenu],
+  imports: [RouterLink, Navbar],
   templateUrl: './spaces-details.html',
   styleUrl: './spaces-details.scss'
 })
 export class SpaceDetails {
 
   space: CoworkingSpace | undefined;
+
+  // Space photos are optional: show the gradient placeholder when one is missing.
+  imageFailed = false;
 
   // Controls the authentication popup
   showAuthModal = false;

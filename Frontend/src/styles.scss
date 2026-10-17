@@ -1,4 +1,66 @@
-/* You can add global styles to this file, and also import other style files */
+/* =========================
+   DESIGN TOKENS
+========================= */
+
+:root {
+  --brand: #635bff;
+  --brand-strong: #5149e8;
+  --brand-soft: #f0efff;
+  --brand-ring: rgba(99, 91, 255, 0.18);
+
+  --ink: #171717;
+  --ink-soft: #52525b;
+  --ink-muted: #71717a;
+
+  --bg: #f8f8fb;
+  --surface: #ffffff;
+  --surface-muted: #f4f4f7;
+  --border: #e7e7ee;
+
+  --success: #16a34a;
+  --danger: #dc2626;
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.12);
+
+  --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+
+/* =========================
+   BASE
+========================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+}
 
 button {
   appearance: none;
@@ -8,4 +70,34 @@ button {
   color: inherit;
   font: inherit;
   cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--brand-ring);
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

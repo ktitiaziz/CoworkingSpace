@@ -20,7 +20,18 @@ export enum UserRole {
 export enum VerificationPurpose {
   REGISTRATION = 'REGISTRATION',
   LOGIN = 'LOGIN',
+  PASSWORD_RESET = 'PASSWORD_RESET',
+  // Internal: the reset code was confirmed and a single-use reset token was issued.
+  PASSWORD_RESET_APPROVED = 'PASSWORD_RESET_APPROVED',
 }
+
+// Purposes a client may submit codes for (the approved state is server-side only).
+export const CLIENT_VERIFICATION_PURPOSES = [
+  VerificationPurpose.REGISTRATION,
+  VerificationPurpose.LOGIN,
+  VerificationPurpose.PASSWORD_RESET,
+] as const;
+export type ClientVerificationPurpose = (typeof CLIENT_VERIFICATION_PURPOSES)[number];
 
 @Entity('users')
 export class User {

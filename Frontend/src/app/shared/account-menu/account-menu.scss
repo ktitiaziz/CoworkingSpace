@@ -1,6 +1,19 @@
 .account-menu { position: relative; display: inline-flex; align-items: center; }
-.account-trigger { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 10px; padding: 10px 14px; background: #5b50f5; color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
-.account-icon { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,.2); font-size: 18px; }
-.account-dropdown { position: absolute; top: calc(100% + 8px); right: 0; z-index: 1000; min-width: 180px; padding: 6px; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 12px 30px rgba(15,23,42,.14); }
-.account-dropdown a, .account-dropdown button { display: block; width: 100%; padding: 10px 12px; text-align: left; color: #1f2937; background: transparent; border: 0; border-radius: 8px; text-decoration: none; font: inherit; cursor: pointer; }
-.account-dropdown a:hover, .account-dropdown button:hover { background: #f3f4f6; }
+.account-trigger { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px 5px 5px; background: var(--surface); color: var(--ink); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+.account-trigger:hover, .account-trigger[aria-expanded="true"] { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-ring); }
+.account-icon { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--brand), #9b8cff); color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .02em; }
+.chevron { color: var(--ink-muted); font-size: 11px; transition: transform .15s; }
+.account-trigger[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+.account-dropdown { position: absolute; top: calc(100% + 10px); right: 0; z-index: 1000; min-width: 200px; padding: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-lg); animation: dropIn .15s ease; }
+.account-dropdown a, .account-dropdown button { display: block; width: 100%; padding: 10px 12px; text-align: left; color: var(--ink); background: transparent; border: 0; border-radius: var(--radius-sm); text-decoration: none; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; }
+.account-dropdown a:hover, .account-dropdown button:hover { background: var(--surface-muted); }
+.account-dropdown .danger { color: var(--danger); }
+.account-dropdown .danger:hover { background: #fef2f2; }
+.login-btn { display: inline-flex; align-items: center; padding: 10px 20px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 700; text-decoration: none; transition: background .15s, transform .15s; }
+.login-btn:hover { background: var(--brand); transform: translateY(-1px); }
+@keyframes dropIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.account-name { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-header { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px 12px; margin-bottom: 6px; border-bottom: 1px solid var(--border); }
+.account-header strong { font-size: 14px; color: var(--ink); }
+.account-header small { font-size: 12px; color: var(--ink-muted); overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 460px) { .account-name { max-width: 90px; } }

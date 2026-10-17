@@ -1,18 +1,4 @@
-<nav class="navbar">
-
-  <div class="logo">
-    Coworking<span>Space</span>
-  </div>
-
-  <div class="nav-links">
-    <a routerLink="/">Home</a>
-    <a routerLink="/spaces" class="active">Spaces</a>
-    <a href="#">About</a>
-
-    <app-account-menu />
-  </div>
-
-</nav>
+<app-navbar />
 
 
 <main class="spaces-page">
@@ -21,13 +7,9 @@
 
   <section class="page-header">
 
-    <p class="eyebrow">
-      FIND YOUR SPACE
-    </p>
+    <p class="eyebrow">FIND YOUR SPACE</p>
 
-    <h1>
-      Choose your perfect workspace.
-    </h1>
+    <h1>Choose your perfect workspace.</h1>
 
     <p>
       Explore our coworking spaces, private offices and
@@ -39,101 +21,120 @@
 
   <!-- Filters -->
 
-  <section class="filters">
+  <section class="filters" aria-label="Filter spaces">
 
-    <div class="search-box">
+    <label class="search-box">
 
-      <span>🔍</span>
+      <span aria-hidden="true">🔍</span>
 
       <input
-        type="text"
-        placeholder="Search spaces..."
+        type="search"
+        placeholder="Search by name, area or description..."
+        aria-label="Search spaces"
+        [value]="search()"
+        (input)="search.set($any($event.target).value)"
       />
 
-    </div>
+    </label>
 
-    <select>
+    <select aria-label="Filter by type" [value]="type()" (change)="type.set($any($event.target).value)">
       <option value="">All types</option>
-      <option value="Open Space">Open Space</option>
-      <option value="Private Office">Private Office</option>
-      <option value="Meeting Room">Meeting Room</option>
+      @for (t of types; track t) {
+        <option [value]="t">{{ t }}</option>
+      }
     </select>
 
-    <select>
+    <select aria-label="Filter by location" [value]="location()" (change)="location.set($any($event.target).value)">
       <option value="">All locations</option>
-      <option value="Tunis Centre">Tunis Centre</option>
-      <option value="Lac 1">Lac 1</option>
-      <option value="Lac 2">Lac 2</option>
-      <option value="El Menzah">El Menzah</option>
+      @for (l of locations; track l) {
+        <option [value]="l">{{ l }}</option>
+      }
     </select>
+
+    <span class="result-count">
+      {{ filteredSpaces().length }} {{ filteredSpaces().length === 1 ? 'space' : 'spaces' }}
+    </span>
 
   </section>
 
 
   <!-- Spaces -->
 
-  <section class="spaces-grid">
+  @if (filteredSpaces().length > 0) {
 
-    @for (space of spaces; track space.id) {
+    <section class="spaces-grid">
 
-      <article class="space-card">
+      @for (space of filteredSpaces(); track space.id) {
 
-        <div class="space-image">
+        <article class="space-card">
 
-          <img
-            [src]="space.image"
-            [alt]="space.name"
-          />
+          <a [class]="'space-image ' + typeClass(space.type)" [routerLink]="['/spaces', space.id]" tabindex="-1">
 
-          <span class="space-type">
-            {{ space.type }}
-          </span>
+            @if (!failedImages.has(space.id)) {
+              <img
+                [src]="space.image"
+                [alt]="space.name"
+                loading="lazy"
+                (error)="onImageError(space.id)"
+              />
+            } @else {
+              <span class="image-fallback" aria-hidden="true">
+                {{ space.type === 'Meeting Room' ? '🤝' : space.type === 'Private Office' ? '🚪' : '💻' }}
+              </span>
+            }
 
-        </div>
+            <span class="space-type">{{ space.type }}</span>
 
-
-        <div class="space-content">
-
-          <h2>
-            {{ space.name }}
-          </h2>
-
-          <p class="location">
-            📍 {{ space.location }}
-          </p>
-
-          <p class="description">
-            {{ space.description }}
-          </p>
+          </a>
 
 
-          <div class="space-info">
+          <div class="space-content">
 
-            <span>
-              👥 {{ space.capacity }} seats
-            </span>
+            <h2>{{ space.name }}</h2>
 
-            <strong>
-              {{ space.price }} DT / day
-            </strong>
+            <p class="location">📍 {{ space.location }}</p>
+
+            <p class="description">{{ space.description }}</p>
+
+            <div class="space-info">
+
+              <span>👥 {{ space.capacity }} seats</span>
+
+              <strong>
+                {{ space.price }} DT<small> / day</small>
+              </strong>
+
+            </div>
+
+            <a class="details-btn" [routerLink]="['/spaces', space.id]">
+              View Details
+              <span aria-hidden="true">→</span>
+            </a>
 
           </div>
 
+        </article>
 
-        <button
-          type="button"
-          class="details-btn"
-          [routerLink]="['/spaces', space.id]"
-        >
-          View Details
-        </button>
+      }
 
-        </div>
+    </section>
 
-      </article>
+  } @else {
 
-    }
+    <section class="empty-state">
 
-  </section>
+      <div class="empty-icon">🔎</div>
+
+      <h2>No spaces match your search</h2>
+
+      <p>Try a different keyword, or clear the filters to see everything.</p>
+
+      <button type="button" class="reset-btn" (click)="resetFilters()">
+        Clear filters
+      </button>
+
+    </section>
+
+  }
 
 </main>

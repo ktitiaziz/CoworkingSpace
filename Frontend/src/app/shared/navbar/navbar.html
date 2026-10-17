@@ -1,0 +1,13 @@
+<nav class="navbar" [class.scrolled]="scrolled">
+  <a class="logo" routerLink="/" aria-label="CoworkingSpace home">
+    <span class="logo-mark" aria-hidden="true"></span>
+    Coworking<span class="logo-accent">Space</span>
+  </a>
+
+  <div class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/spaces" routerLinkActive="active">Spaces</a>
+  </div>
+
+  <app-account-menu />
+</nav>

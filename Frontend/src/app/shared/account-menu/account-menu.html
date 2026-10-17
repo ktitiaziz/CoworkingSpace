@@ -1,14 +1,18 @@
 <div class="account-menu">
   @if (isLoggedIn) {
     <button type="button" class="account-trigger" aria-label="Account menu" [attr.aria-expanded]="open" (click)="toggle()">
-      <span class="account-icon" aria-hidden="true">♙</span>
-      <span>Account</span>
-      <span aria-hidden="true">▾</span>
+      <span class="account-icon" aria-hidden="true">{{ initials }}</span>
+      <span class="account-name">{{ displayName }}</span>
+      <span class="chevron" aria-hidden="true">▾</span>
     </button>
     @if (open) {
       <div class="account-dropdown">
+        <div class="account-header">
+          <strong>{{ displayName }}</strong>
+          @if (user?.email) { <small>{{ user?.email }}</small> }
+        </div>
         <a routerLink="/my-reservations" (click)="open = false">My Reservations</a>
-        <button type="button" (click)="logout()">Logout</button>
+        <button type="button" class="danger" (click)="logout()">Log out</button>
       </div>
     }
   } @else {

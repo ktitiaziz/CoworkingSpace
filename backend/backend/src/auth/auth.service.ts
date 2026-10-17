@@ -4,19 +4,22 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { createHash, randomInt } from 'node:crypto';
+import { createHash, randomBytes, randomInt, timingSafeEqual } from 'node:crypto';
 import { QueryFailedError, Repository } from 'typeorm';
 
-import { User, VerificationPurpose } from '../users/entities/user.entity.js';
+import { ClientVerificationPurpose, User, VerificationPurpose } from '../users/entities/user.entity.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { VerifyCodeDto } from './dto/verify-code.dto.js';
 import { ResendCodeDto } from './dto/resend-code.dto.js';
+import { ForgotPasswordDto } from './dto/forgot-password.dto.js';
+import { ResetPasswordDto } from './dto/reset-password.dto.js';
 import { MailService } from './mail.service.js';
 
 const BCRYPT_SALT_ROUNDS = 10;
@@ -25,6 +28,8 @@ const EMAIL_ALREADY_REGISTERED_MESSAGE = 'Email is already registered';
 const CODE_TTL_MS = 5 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 60 * 1000;
 const MAX_CODE_ATTEMPTS = 5;
+const RESET_TOKEN_TTL_MS = 10 * 60 * 1000;
+const INVALID_RESET_MESSAGE = 'This password reset link is invalid or has expired. Please start again.';
 
 @Injectable()
 export class AuthService {
@@ -56,12 +61,12 @@ export class AuthService {
       };
     }
 
-    await this.issueCode(user, VerificationPurpose.LOGIN);
+    // Email ownership is proven once at sign-up, so verified users log in with
+    // their password alone instead of waiting for an emailed code each time.
     return {
-      message: 'A login verification code has been sent to your email.',
-      requiresVerification: true,
-      purpose: VerificationPurpose.LOGIN,
-      email: user.email,
+      message: 'Logged in successfully.',
+      requiresVerification: false,
+      accessToken: await this.signAccessToken(user),
     };
   }
 
@@ -141,24 +146,31 @@ export class AuthService {
       throw new BadRequestException('Invalid verification code.');
     }
 
+    if (dto.purpose === VerificationPurpose.PASSWORD_RESET) {
+      // Swap the 6-digit code for a long random single-use token that authorizes
+      // exactly one password change for this account within a short window.
+      const resetToken = randomBytes(32).toString('hex');
+      user.verificationCodeHash = this.hashCode(resetToken);
+      user.verificationCodeExpiresAt = new Date(Date.now() + RESET_TOKEN_TTL_MS);
+      user.verificationPurpose = VerificationPurpose.PASSWORD_RESET_APPROVED;
+      user.verificationAttempts = 0;
+      await this.usersRepository.save(user);
+      return { message: 'Code verified. You can now choose a new password.', resetToken };
+    }
+
     await this.clearCode(user);
 
     if (dto.purpose === VerificationPurpose.REGISTRATION) {
       user.emailVerified = true;
       await this.usersRepository.save(user);
-      return { message: 'Email verified successfully. You can now log in.' };
+      return { message: 'Email verified successfully.', accessToken: await this.signAccessToken(user) };
     }
 
     if (!user.emailVerified) {
       throw new BadRequestException('Verify your email address before logging in.');
     }
 
-    const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-    });
-    return { message: 'Login verified successfully.', accessToken };
+    return { message: 'Login verified successfully.', accessToken: await this.signAccessToken(user) };
   }
 
   async resendCode(dto: ResendCodeDto) {
@@ -188,7 +200,56 @@ export class AuthService {
     return { message: 'If the account is eligible, a verification code will be sent.' };
   }
 
-  private async issueCode(user: User, purpose: VerificationPurpose, force = false) {
+  async forgotPassword(dto: ForgotPasswordDto) {
+    const email = dto.email.trim().toLowerCase();
+    const user = await this.usersRepository.findOneBy({ email });
+    if (!user) throw new NotFoundException('No account found with this email address.');
+
+    await this.issueCode(user, VerificationPurpose.PASSWORD_RESET);
+    return {
+      message: 'A password reset code has been sent to your email.',
+      requiresVerification: true,
+      purpose: VerificationPurpose.PASSWORD_RESET,
+      email: user.email,
+    };
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const email = dto.email.trim().toLowerCase();
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .addSelect([
+        'user.verificationCodeHash',
+        'user.verificationCodeExpiresAt',
+        'user.verificationPurpose',
+        'user.verificationAttempts',
+      ])
+      .where('LOWER(user.email) = LOWER(:email)', { email })
+      .getOne();
+
+    if (
+      !user ||
+      user.verificationPurpose !== VerificationPurpose.PASSWORD_RESET_APPROVED ||
+      !user.verificationCodeHash ||
+      !user.verificationCodeExpiresAt ||
+      user.verificationCodeExpiresAt.getTime() <= Date.now() ||
+      !timingSafeEqual(Buffer.from(this.hashCode(dto.resetToken)), Buffer.from(user.verificationCodeHash))
+    ) {
+      throw new BadRequestException(INVALID_RESET_MESSAGE);
+    }
+
+    user.password = await bcrypt.hash(dto.newPassword, BCRYPT_SALT_ROUNDS);
+    // Receiving the reset code proves ownership of the address.
+    user.emailVerified = true;
+    await this.clearCode(user);
+
+    return {
+      message: 'Your password has been changed.',
+      accessToken: await this.signAccessToken(user),
+    };
+  }
+
+  private async issueCode(user: User, purpose: ClientVerificationPurpose, force = false) {
     if (!force && user.verificationLastSentAt && Date.now() - user.verificationLastSentAt.getTime() < RESEND_COOLDOWN_MS) {
       // Login/register attempts should not send repeated emails during the cooldown.
       throw new HttpException(
@@ -203,7 +264,20 @@ export class AuthService {
     user.verificationAttempts = 0;
     user.verificationLastSentAt = new Date();
     await this.usersRepository.save(user);
-    await this.mailService.sendVerificationCode(user.email, code, purpose);
+    // Send in the background so the response is not held up by SMTP. Failures are
+    // logged by MailService; the user can request a new code with "Resend code".
+    void this.mailService.sendVerificationCode(user.email, code, purpose).catch(() => undefined);
+  }
+
+  private signAccessToken(user: User) {
+    return this.jwtService.signAsync({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      // Display-only profile fields so the UI can greet the user without another request.
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
   }
 
   private async clearCode(user: User) {

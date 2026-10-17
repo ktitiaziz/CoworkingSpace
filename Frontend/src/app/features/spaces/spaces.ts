@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AccountMenu } from '../../shared/account-menu/account-menu';
+import { Navbar } from '../../shared/navbar/navbar';
 
 interface CoworkingSpace {
   id: number;
@@ -15,7 +15,7 @@ interface CoworkingSpace {
 
 @Component({
   selector: 'app-spaces',
-  imports: [RouterLink, AccountMenu],
+  imports: [RouterLink, Navbar],
   templateUrl: './spaces.html',
   styleUrl: './spaces.scss'
 })
@@ -88,5 +88,39 @@ export class Spaces {
       image: 'assets/spaces/focus.jpg'
     }
   ];
+
+  readonly search = signal('');
+  readonly type = signal('');
+  readonly location = signal('');
+
+  readonly types = [...new Set(this.spaces.map((s) => s.type))];
+  readonly locations = [...new Set(this.spaces.map((s) => s.location))];
+
+  readonly filteredSpaces = computed(() => {
+    const query = this.search().trim().toLowerCase();
+
+    return this.spaces.filter((space) =>
+      (!query || `${space.name} ${space.location} ${space.description}`.toLowerCase().includes(query)) &&
+      (!this.type() || space.type === this.type()) &&
+      (!this.location() || space.location === this.location())
+    );
+  });
+
+  // Space photos are optional: fall back to the gradient placeholder when one is missing.
+  failedImages = new Set<number>();
+
+  onImageError(id: number): void {
+    this.failedImages.add(id);
+  }
+
+  resetFilters(): void {
+    this.search.set('');
+    this.type.set('');
+    this.location.set('');
+  }
+
+  typeClass(type: string): string {
+    return type.toLowerCase().replace(/\s+/g, '-');
+  }
 
 }

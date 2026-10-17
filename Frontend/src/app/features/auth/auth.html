@@ -6,11 +6,14 @@
     @if (mode === 'login') {
       <p class="eyebrow">WELCOME BACK</p>
       <h1>Sign in to continue</h1>
-      <p class="subtitle">We'll email you a one-time code to confirm it's you.</p>
+      <p class="subtitle">Sign in with your email and password.</p>
       <form (ngSubmit)="submitLogin()">
         <label for="login-email">Email address</label>
         <input id="login-email" name="email" type="email" [(ngModel)]="email" autocomplete="email" required placeholder="you@example.com" />
-        <label for="login-password">Password</label>
+        <div class="label-row">
+          <label for="login-password">Password</label>
+          <button type="button" class="forgot-link" (click)="switchMode('forgot')">Forgot password?</button>
+        </div>
         <input id="login-password" name="password" type="password" [(ngModel)]="password" autocomplete="current-password" required placeholder="Your password" />
         <button class="primary" type="submit" [disabled]="busy">{{ busy ? 'Please wait…' : 'Continue' }}</button>
       </form>
@@ -18,7 +21,7 @@
     } @else if (mode === 'signup') {
       <p class="eyebrow">GET STARTED</p>
       <h1>Create your account</h1>
-      <p class="subtitle">Create an account and verify your email to get started.</p>
+      <p class="subtitle">We'll email you a one-time code to verify your address.</p>
       <form (ngSubmit)="submitSignup()">
         <div class="name-row">
           <div><label for="first-name">First name</label><input id="first-name" name="firstName" [(ngModel)]="firstName" autocomplete="given-name" required /></div>
@@ -31,9 +34,33 @@
         <button class="primary" type="submit" [disabled]="busy">{{ busy ? 'Creating account…' : 'Create account' }}</button>
       </form>
       <p class="switch">Already have an account? <button type="button" (click)="switchMode('login')">Sign in</button></p>
+    } @else if (mode === 'forgot') {
+      <div class="mail-icon">🔑</div>
+      <p class="eyebrow">FORGOT PASSWORD</p>
+      <h1>Reset your password</h1>
+      <p class="subtitle">Enter the email address of your account and we'll send you a code to reset it.</p>
+      <form (ngSubmit)="submitForgotPassword()">
+        <label for="forgot-email">Email address</label>
+        <input id="forgot-email" name="email" type="email" [(ngModel)]="email" autocomplete="email" required placeholder="you@example.com" />
+        <button class="primary" type="submit" [disabled]="busy">{{ busy ? 'Please wait…' : 'Send reset code' }}</button>
+      </form>
+      <button class="text-button" type="button" (click)="switchMode('login')">Back to sign in</button>
+    } @else if (mode === 'reset') {
+      <div class="mail-icon">🔒</div>
+      <p class="eyebrow">NEW PASSWORD</p>
+      <h1>Choose a new password</h1>
+      <p class="subtitle">Create a new password for <strong>{{ email }}</strong>.</p>
+      <form (ngSubmit)="submitNewPassword()">
+        <label for="new-password">New password</label>
+        <input id="new-password" name="newPassword" type="password" [(ngModel)]="newPassword" autocomplete="new-password" minlength="8" required placeholder="At least 8 characters" />
+        <label for="confirm-password">Confirm new password</label>
+        <input id="confirm-password" name="confirmPassword" type="password" [(ngModel)]="confirmPassword" autocomplete="new-password" minlength="8" required placeholder="Type it again" />
+        <button class="primary" type="submit" [disabled]="busy">{{ busy ? 'Saving…' : 'Change password' }}</button>
+      </form>
+      <button class="text-button" type="button" (click)="switchMode('login')">Back to sign in</button>
     } @else {
       <div class="mail-icon">✉</div>
-      <p class="eyebrow">EMAIL VERIFICATION</p>
+      <p class="eyebrow">{{ purpose === 'PASSWORD_RESET' ? 'PASSWORD RESET' : 'EMAIL VERIFICATION' }}</p>
       <h1>Check your inbox</h1>
       <p class="subtitle">Enter the six-digit code sent to <strong>{{ email }}</strong>.</p>
       <form (ngSubmit)="submitCode()">

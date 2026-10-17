@@ -1,8 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { AccountMenu } from '../../shared/account-menu/account-menu';
+import { Navbar } from '../../shared/navbar/navbar';
 
 interface ApiReservation {
   id: number;
@@ -39,12 +39,14 @@ interface Reservation {
 
 @Component({
   selector: 'app-my-reservations',
-  imports: [RouterLink, AccountMenu],
+  imports: [RouterLink, Navbar],
   templateUrl: './myreserv.html',
   styleUrl: './myreserv.scss',
 })
 export class MyReservations implements OnInit {
   private readonly http = inject(HttpClient);
+  // The app is zoneless: async HTTP callbacks must request a re-render explicitly.
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly apiUrl = 'http://localhost:3000';
 
   reservations: Reservation[] = [];
@@ -78,7 +80,7 @@ export class MyReservations implements OnInit {
     this.error = '';
     this.http.get<ApiReservation[]>(`${this.apiUrl}/reservations`, {
       headers: { Authorization: `Bearer ${token}` },
-    }).pipe(finalize(() => (this.loading = false))).subscribe({
+    }).pipe(finalize(() => { this.loading = false; this.cdr.markForCheck(); })).subscribe({
       next: (items) => {
         this.reservations = (Array.isArray(items) ? items : []).map((item) => this.toReservation(item));
       },
@@ -107,7 +109,7 @@ export class MyReservations implements OnInit {
     this.notice = '';
     this.http.delete<ApiReservation>(`${this.apiUrl}/reservations/${reservation.id}`, {
       headers: { Authorization: `Bearer ${token}` },
-    }).pipe(finalize(() => (reservation.busy = false))).subscribe({
+    }).pipe(finalize(() => { reservation.busy = false; this.cdr.markForCheck(); })).subscribe({
       next: () => {
         // Reload the source of truth from the API; cancellation must persist in PostgreSQL.
         this.notice = 'Reservation cancelled successfully.';

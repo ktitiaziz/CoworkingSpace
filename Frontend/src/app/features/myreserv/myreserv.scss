@@ -7,92 +7,9 @@
 
   min-height: 100vh;
 
-  background: #f7f7f8;
+  background: var(--bg);
 
   color: #171717;
-
-  font-family:
-   objective;
-}
-
-
-/* =====================================================
-   NAVBAR
-===================================================== */
-
-.navbar {
-  height: 72px;
-
-  padding: 0 7%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  background: #ffffff;
-
-  border-bottom: 1px solid #e7e7e7;
-}
-
-
-.logo {
-  font-size: 22px;
-
-  font-weight: 800;
-
-  letter-spacing: -0.5px;
-}
-
-
-.logo span {
-  color: #635bff;
-}
-
-
-.nav-links {
-  display: flex;
-
-  align-items: center;
-
-  gap: 28px;
-}
-
-
-.nav-links a {
-  color: #666666;
-
-  text-decoration: none;
-
-  font-size: 14px;
-
-  font-weight: 500;
-
-  transition: color 0.2s ease;
-}
-
-
-.nav-links a:hover,
-.nav-links a.active {
-  color: #635bff;
-}
-
-
-.login-btn {
-  padding: 10px 20px;
-
-  border: none;
-
-  border-radius: 8px;
-
-  background: #171717;
-
-  color: #ffffff;
-
-  font-weight: 600;
-
-  cursor: pointer;
 }
 
 
@@ -129,7 +46,7 @@
 .eyebrow {
   margin: 0 0 10px;
 
-  color: #635bff;
+  color: var(--brand);
 
   font-size: 11px;
 
@@ -166,7 +83,7 @@
 
   border-radius: 9px;
 
-  background: #635bff;
+  background: var(--brand);
 
   color: #ffffff;
 
@@ -183,7 +100,7 @@
 
 
 .browse-btn:hover {
-  background: #5149e8;
+  background: var(--brand-strong);
 
   transform: translateY(-1px);
 }
@@ -412,7 +329,7 @@
 
   border-radius: 11px;
 
-  background: #f0efff;
+  background: var(--brand-soft);
 
   font-size: 22px;
 }
@@ -423,7 +340,7 @@
 
   margin-bottom: 4px;
 
-  color: #635bff;
+  color: var(--brand);
 
   font-size: 9px;
 
@@ -565,7 +482,7 @@
 
 
 .price strong {
-  color: #635bff;
+  color: var(--brand);
 
   font-size: 21px;
 }
@@ -665,7 +582,7 @@
 
   border-radius: 8px;
 
-  background: #635bff;
+  background: var(--brand);
 
   color: #ffffff;
 
@@ -788,19 +705,13 @@
   }
 
 
-  .navbar {
-    padding: 0 5%;
-  }
+  
 
 
-  .nav-links {
-    gap: 10px;
-  }
+  
 
 
-  .nav-links a {
-    display: none;
-  }
+  
 
 
   .page-header h1 {

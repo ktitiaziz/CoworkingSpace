@@ -1,32 +1,4 @@
-<!-- ==========================================
-     NAVBAR
-========================================== -->
-
-<nav class="navbar">
-
-  <div class="logo">
-    Coworking<span>Space</span>
-  </div>
-
-  <div class="nav-links">
-
-    <a routerLink="/">
-      Home
-    </a>
-
-    <a routerLink="/spaces">
-      Spaces
-    </a>
-
-    <a href="#">
-      About
-    </a>
-
-    <app-account-menu />
-
-  </div>
-
-</nav>
+<app-navbar />
 
 
 <!-- ==========================================
@@ -51,10 +23,17 @@
 
       <div class="details-image">
 
-        <img
-          [src]="space.image"
-          [alt]="space.name"
-        />
+        @if (!imageFailed) {
+          <img
+            [src]="space.image"
+            [alt]="space.name"
+            (error)="imageFailed = true"
+          />
+        } @else {
+          <span class="image-fallback" aria-hidden="true">
+            {{ space.type === 'Meeting Room' ? '🤝' : space.type === 'Private Office' ? '🚪' : '💻' }}
+          </span>
+        }
 
         <span class="space-type">
           {{ space.type }}
