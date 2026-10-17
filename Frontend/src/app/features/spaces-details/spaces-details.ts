@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AccountMenu } from '../../shared/account-menu/account-menu';
 
 interface CoworkingSpace {
   id: number;
@@ -14,7 +15,7 @@ interface CoworkingSpace {
 
 @Component({
   selector: 'app-space-details',
-  imports: [RouterLink],
+  imports: [RouterLink, AccountMenu],
   templateUrl: './spaces-details.html',
   styleUrl: './spaces-details.scss'
 })
@@ -27,6 +28,9 @@ export class SpaceDetails {
 
   // Controls whether we show Login or Sign Up
   authMode: 'login' | 'signup' = 'login';
+
+  // Validation message displayed inside the modal
+  authError = '';
 
   spaces: CoworkingSpace[] = [
     {
@@ -91,39 +95,121 @@ export class SpaceDetails {
     }
   ];
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private router: Router) {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
     this.space = this.spaces.find(space => space.id === id);
   }
 
   openLogin(): void {
-    this.authMode = 'login';
-    this.showAuthModal = true;
+    void this.router.navigate(['/auth'], { queryParams: { mode: 'login', returnUrl: this.space ? `/spaces/${this.space.id}/reserve` : '/spaces' } });
   }
 
   openSignup(): void {
-    this.authMode = 'signup';
-    this.showAuthModal = true;
+    void this.router.navigate(['/auth'], { queryParams: { mode: 'signup', returnUrl: this.space ? `/spaces/${this.space.id}/reserve` : '/spaces' } });
   }
 
   closeAuthModal(): void {
     this.showAuthModal = false;
+    this.authError = '';
   }
 
-  login(): void {
+  clearAuthError(): void {
+    this.authError = '';
+  }
+
+  login(email: string, password: string): void {
+
+    const cleanEmail = email.trim();
+    const cleanPassword = password.trim();
+
+    // Both fields empty
+    if (!cleanEmail && !cleanPassword) {
+      this.authError = 'Please enter your email and password.';
+      return;
+    }
+
+    // Email empty
+    if (!cleanEmail) {
+      this.authError = 'Please enter your email.';
+      return;
+    }
+
+    // Password empty
+    if (!cleanPassword) {
+      this.authError = 'Please enter your password.';
+      return;
+    }
+
+    // Basic email validation
+    if (!this.isValidEmail(cleanEmail)) {
+      this.authError = 'Please enter a valid email address.';
+      return;
+    }
+
     console.log('Login submitted');
+
+    // Only navigate when validation succeeds
     this.closeAuthModal();
+
     this.goToReservation();
   }
 
-  signup(): void {
+  signup(
+    fullName: string,
+    email: string,
+    password: string
+  ): void {
+
+    const cleanName = fullName.trim();
+    const cleanEmail = email.trim();
+    const cleanPassword = password.trim();
+
+    // Check all fields
+    if (!cleanName && !cleanEmail && !cleanPassword) {
+      this.authError = 'Please complete all the fields.';
+      return;
+    }
+
+    if (!cleanName) {
+      this.authError = 'Please enter your full name.';
+      return;
+    }
+
+    if (!cleanEmail) {
+      this.authError = 'Please enter your email.';
+      return;
+    }
+
+    if (!cleanPassword) {
+      this.authError = 'Please enter your password.';
+      return;
+    }
+
+    if (!this.isValidEmail(cleanEmail)) {
+      this.authError = 'Please enter a valid email address.';
+      return;
+    }
+
+    if (cleanPassword.length < 6) {
+      this.authError = 'Password must contain at least 6 characters.';
+      return;
+    }
+
     console.log('Signup submitted');
+
+    // Only navigate when validation succeeds
     this.closeAuthModal();
+
     this.goToReservation();
+  }
+
+  private isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
   private goToReservation(): void {
+
     if (!this.space) {
       return;
     }

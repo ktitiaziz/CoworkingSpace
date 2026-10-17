@@ -27,9 +27,7 @@
       About
     </a>
 
-    <button type="button" class="login-btn">
-      Login
-    </button>
+    <app-account-menu />
 
   </div>
 
@@ -41,6 +39,16 @@
 ===================================================== -->
 
 <main class="reservations-page">
+
+  @if (loading) {
+    <p role="status" class="subtitle">Loading your reservations…</p>
+  }
+  @if (error) {
+    <p role="alert" class="subtitle">{{ error }}</p>
+  }
+  @if (notice) {
+    <p role="status" class="subtitle">{{ notice }}</p>
+  }
 
 
   <!-- ===================================================
@@ -256,7 +264,7 @@
                 </span>
 
                 <strong>
-                  #{{ reservation.seatNumber }}
+                  #{{ reservation.seatNumber ?? "—" }}
                 </strong>
 
               </div>
@@ -315,8 +323,9 @@
                 type="button"
                 class="cancel-btn"
                 (click)="cancelReservation(reservation)"
+                [disabled]="reservation.busy"
               >
-                Cancel reservation
+                {{ reservation.busy ? 'Cancelling…' : 'Cancel reservation' }}
               </button>
 
 
@@ -408,7 +417,7 @@
 
               <p>
                 {{ reservation.date }}
-                · Seat #{{ reservation.seatNumber }}
+                · Seat #{{ reservation.seatNumber ?? "—" }}
               </p>
 
             </div>

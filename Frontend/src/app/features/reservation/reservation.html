@@ -6,9 +6,9 @@
   <div class="nav-links">
     <a routerLink="/">Home</a>
     <a routerLink="/spaces">Spaces</a>
-    <a routerLink="/reservations">My Reservations</a>
+    <a routerLink="/my-reservations">My Reservations</a>
     <a href="#">About</a>
-    <button class="login-btn">Login</button>
+    <app-account-menu />
   </div>
 </nav>
 
@@ -31,6 +31,28 @@
     </div>
   </section>
 
+
+  <!-- DATE RANGE: availability is calculated for these selected dates. -->
+  <section class="reservation-date-range" aria-label="Reservation dates">
+    <label>
+      <span>Start date</span>
+      <input
+        type="date"
+        [value]="reservationStartDate"
+        
+        (change)="onStartDateChange($event)"
+      />
+    </label>
+    <label>
+      <span>End date</span>
+      <input
+        type="date"
+        [value]="reservationEndDate"
+        [min]="reservationStartDate"
+        (change)="onEndDateChange($event)"
+      />
+    </label>
+  </section>
 
   <!-- LEGEND -->
 
@@ -210,12 +232,13 @@
           <g
             class="seat"
             role="button"
-            [attr.tabindex]="seat.status === 'reserved' ? -1 : 0"
+            [attr.tabindex]="seat.status === 'reserved' || seat.status === 'unconfigured' ? -1 : 0"
             [attr.aria-label]="'Seat ' + seat.number + ', ' + seat.status"
-            [attr.aria-disabled]="seat.status === 'reserved'"
+            [attr.aria-disabled]="seat.status === 'reserved' || seat.status === 'unconfigured'"
             [class.available]="seat.status === 'available'"
             [class.reserved]="seat.status === 'reserved'"
             [class.mine]="seat.status === 'mine'"
+            [class.unconfigured]="seat.status === 'unconfigured'"
             [class.selected]="selectedSeat?.id === seat.id"
             [attr.transform]="'translate(' + seat.x + ' ' + seat.y + ') rotate(' + seat.rot + ')'"
             (click)="selectSeat(seat)"

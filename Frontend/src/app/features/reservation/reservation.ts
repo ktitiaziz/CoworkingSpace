@@ -1,11 +1,14 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { AccountMenu } from '../../shared/account-menu/account-menu';
 
 /* =====================================================
    TYPES
 ===================================================== */
 
-type SeatStatus = 'available' | 'reserved' | 'mine';
+type SeatStatus = 'available' | 'reserved' | 'mine' | 'unconfigured';
 type SeatKind = 'desk' | 'chair';
 
 interface Seat {
@@ -16,6 +19,8 @@ interface Seat {
   x: number;
   y: number;
   rot: number;    // 0 = chair on the right, 90 = below, 180 = left, 270 = above
+  databaseId?: number;
+  reservationId?: number;
 }
 
 type FurnitureType =
@@ -180,13 +185,8 @@ class LayoutBuilder {
   seat(x: number, y: number, rot: number, kind: SeatKind = 'desk'): this {
     const id = ++this.count;
 
-    const status: SeatStatus = this.mine.includes(id)
-      ? 'mine'
-      : this.reserved.includes(id)
-        ? 'reserved'
-        : 'available';
-
-    this.seats.push({ id, number: id, status, kind, x, y, rot });
+    // Initial status is always neutral; the real status is loaded from the backend.
+    this.seats.push({ id, number: id, status: 'available', kind, x, y, rot });
     return this;
   }
 
@@ -246,11 +246,18 @@ class LayoutBuilder {
 
 @Component({
   selector: 'app-reservation',
-  imports: [RouterLink],
+  imports: [RouterLink, AccountMenu],
   templateUrl: './reservation.html',
   styleUrl: './reservation.scss'
 })
-export class Reservation {
+export class Reservation implements OnInit {
+  private readonly apiUrl = 'http://localhost:3000';
+  loadingSeats = false;
+  savingReservation = false;
+  reservationError = '';
+  reservationStartDate = this.todayISO();
+  reservationEndDate = this.todayISO();
+  private pendingSeatNumber: number | null = null;
 
   spaceId: number | null = null;
   selectedSeat: Seat | null = null;
@@ -579,10 +586,192 @@ export class Reservation {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     this.spaceId = Number(this.route.snapshot.paramMap.get('id'));
     this.currentLayout = this.layouts[this.spaceId] ?? this.layouts[1];
+  }
+
+  ngOnInit(): void {
+    // Restore the requested booking context after login/signup/email verification.
+    // These query parameters affect selection only; they never alter the floor layout.
+    const query = this.route.snapshot.queryParamMap;
+    const startDate = query.get('startDate');
+    const endDate = query.get('endDate');
+    const seatNumber = Number(query.get('seatNumber'));
+
+    if (startDate && /^\d{4}-\d{2}-\d{2}$/.test(startDate)) {
+      this.reservationStartDate = startDate;
+    }
+    if (endDate && /^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+      this.reservationEndDate = endDate;
+    }
+    if (this.reservationEndDate < this.reservationStartDate) {
+      this.reservationEndDate = this.reservationStartDate;
+    }
+    if (query.has('seatNumber') && Number.isInteger(seatNumber) && seatNumber > 0) {
+      this.pendingSeatNumber = seatNumber;
+    }
+
+    void this.loadSeatStatus();
+  }
+
+  private todayISO(): string {
+    const now = new Date();
+    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 10);
+  }
+
+
+  private async loadSeatStatus(): Promise<void> {
+    if (!this.spaceId || !Number.isFinite(this.spaceId)) {
+      this.reservationError = 'Invalid coworking space.';
+      return;
+    }
+
+    this.loadingSeats = true;
+    this.reservationError = '';
+
+    try {
+      // Both GET endpoints are public and return only the fields needed to
+      // render seat availability. Browsing and seat selection do not require login.
+      const seats = await firstValueFrom(
+        this.http.get<Array<{ id: number; seatNumber: number }>>(
+          `${this.apiUrl}/seats?spaceId=${this.spaceId}`
+        )
+      );
+
+      const reservations = await firstValueFrom(
+        this.http.get<Array<{
+          id: number;
+          status: string;
+          startDate: string;
+          endDate: string;
+          seat?: { id: number; seatNumber: number } | null;
+        }>>(`${this.apiUrl}/reservations/space/${this.spaceId}`, {
+          params: {
+            startDate: this.reservationStartDate,
+            endDate: this.reservationEndDate
+          }
+        })
+      );
+
+      const active = reservations.filter(r =>
+        r.status !== 'CANCELLED' && !!r.seat
+      );
+
+      // The public endpoint intentionally hides user identities. When signed in,
+      // compare it with the authenticated user's own reservation list so their
+      // bookings render green while bookings belonging to other accounts render red.
+      let myReservations: Array<{ id: number; status: string; startDate: string; endDate: string; seat?: { id: number } | null }> = [];
+      const token = localStorage.getItem('coworking_access_token');
+      if (token) {
+        try {
+          myReservations = await firstValueFrom(this.http.get<typeof myReservations>(`${this.apiUrl}/reservations`, {
+            headers: { Authorization: `Bearer ${token}` }
+          }));
+        } catch (error) {
+          // Public availability remains usable if a stale token exists.
+          if ((error as HttpErrorResponse).status === 401) {
+            localStorage.removeItem('coworking_access_token');
+          }
+        }
+      }
+      const overlapsSelectedDates = (booking: { startDate: string; endDate: string }) =>
+        String(booking.startDate).slice(0, 10) <= this.reservationEndDate &&
+        String(booking.endDate).slice(0, 10) >= this.reservationStartDate;
+      const myActive = myReservations.filter(r =>
+        r.status !== 'CANCELLED' && r.status !== 'cancelled' && !!r.seat && overlapsSelectedDates(r)
+      );
+
+      // Seat mapping contract: visual seat N maps only to database seatNumber N
+      // inside the current space. Never map by array position or assume that a
+      // database ID equals the visual number. Ambiguous/missing mappings fail closed.
+      const dbSeatsByNumber = new Map<number, Array<{ id: number; seatNumber: number }>>();
+      for (const dbSeat of seats) {
+        const number = Number(dbSeat.seatNumber);
+        const matches = dbSeatsByNumber.get(number) ?? [];
+        matches.push(dbSeat);
+        dbSeatsByNumber.set(number, matches);
+      }
+
+      let unmappedSeatCount = 0;
+      for (const visualSeat of this.currentLayout.seats) {
+        const matches = dbSeatsByNumber.get(visualSeat.number) ?? [];
+        const dbSeat = matches.length === 1 ? matches[0] : undefined;
+        visualSeat.databaseId = dbSeat?.id;
+        visualSeat.reservationId = undefined;
+
+        if (!dbSeat) {
+          // Do not let a visually available seat submit an incorrect seat ID.
+          visualSeat.status = 'unconfigured';
+          unmappedSeatCount++;
+          continue;
+        }
+
+        visualSeat.status = 'available';
+        const booking = active.find(r => Number(r.seat?.id) === Number(dbSeat.id));
+        if (booking) {
+          const mine = myActive.find(r => Number(r.seat?.id) === Number(dbSeat.id));
+          visualSeat.status = mine ? 'mine' : 'reserved';
+          visualSeat.reservationId = mine?.id ?? booking.id;
+        }
+      }
+
+      if (unmappedSeatCount > 0) {
+        this.reservationError = `${unmappedSeatCount} seat(s) in this space do not have a unique database mapping. They are disabled until the seat records are corrected.`;
+      }
+
+      // Re-select the same visual seat only after fresh availability is loaded.
+      // Never restore a seat that is reserved or lacks a unique database mapping.
+      if (this.pendingSeatNumber !== null) {
+        const requestedNumber = this.pendingSeatNumber;
+        this.pendingSeatNumber = null;
+        const requestedSeat = this.currentLayout.seats.find(
+          seat => seat.number === requestedNumber
+        );
+        if (requestedSeat?.status === 'available' && requestedSeat.databaseId) {
+          this.selectedSeat = requestedSeat;
+          this.reservationError = '';
+        } else {
+          this.selectedSeat = null;
+          this.reservationError = requestedSeat
+            ? `Seat ${requestedNumber} is no longer available for those dates. Please choose another seat.`
+            : `Seat ${requestedNumber} could not be restored for this space. Please choose a seat again.`;
+        }
+      }
+    } catch {
+      this.reservationError =
+        'Could not load live seat availability. Check that the backend is running and the space has seats configured.';
+    } finally {
+      this.loadingSeats = false;
+    }
+  }
+
+  onStartDateChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    if (!value) return;
+
+    this.reservationStartDate = value;
+    if (this.reservationEndDate < value) {
+      this.reservationEndDate = value;
+    }
+    this.selectedSeat = null;
+    void this.loadSeatStatus();
+  }
+
+  onEndDateChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    if (!value) return;
+
+    this.reservationEndDate = value;
+    this.selectedSeat = null;
+    if (this.reservationEndDate < this.reservationStartDate) {
+      this.reservationError = 'End date must be on or after start date.';
+      return;
+    }
+    void this.loadSeatStatus();
   }
 
   get availableCount(): number {
@@ -590,24 +779,84 @@ export class Reservation {
   }
 
   selectSeat(seat: Seat): void {
-    if (seat.status === 'reserved') {
+    if (seat.status === 'reserved' || seat.status === 'mine' || seat.status === 'unconfigured' || this.loadingSeats) {
+      if (seat.status === 'unconfigured') {
+        this.reservationError = `Seat ${seat.number} has no unique database mapping and cannot be reserved.`;
+      }
       return;
     }
+    this.reservationError = '';
     this.selectedSeat = seat;
   }
 
   /* ---------- confirmation popup ---------- */
 
-  confirmReservation(): void {
-    if (!this.selectedSeat) {
+  async confirmReservation(): Promise<void> {
+    if (!this.selectedSeat || this.savingReservation) return;
+
+    const token = localStorage.getItem('coworking_access_token');
+    if (!token) {
+      const returnUrl = this.router.createUrlTree(
+        ['/spaces', this.spaceId, 'reserve'],
+        {
+          queryParams: {
+            startDate: this.reservationStartDate,
+            endDate: this.reservationEndDate,
+            seatNumber: this.selectedSeat.number,
+          },
+        },
+      ).toString();
+      void this.router.navigate(['/auth'], {
+        queryParams: {
+          mode: 'login',
+          returnUrl,
+        },
+      });
+      return;
+    }
+    if (!this.selectedSeat.databaseId) {
+      this.reservationError = 'This seat has no matching database seat for this space.';
+      return;
+    }
+    if (this.reservationEndDate < this.reservationStartDate) {
+      this.reservationError = 'End date must be on or after start date.';
       return;
     }
 
-    // TODO: call your backend here before showing the popup
-    this.selectedSeat.status = 'mine';
-    this.confirmedSeat = this.selectedSeat;
-    this.confirmationNumber = 'CW-' + Math.floor(100000 + Math.random() * 900000);
-    this.showConfirmation = true;
+    this.savingReservation = true;
+    this.reservationError = '';
+
+    try {
+      const reservation = await firstValueFrom(
+        this.http.post<{ id: number }>(
+          `${this.apiUrl}/reservations`,
+          {
+            spaceId: this.spaceId,
+            seatId: this.selectedSeat.databaseId,
+            startDate: this.reservationStartDate,
+            endDate: this.reservationEndDate
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+      );
+
+      this.selectedSeat.status = 'mine';
+      this.selectedSeat.reservationId = reservation.id;
+      this.confirmedSeat = this.selectedSeat;
+      this.confirmationNumber = 'CW-' + String(reservation.id).padStart(6, '0');
+      this.showConfirmation = true;
+    } catch (error) {
+      const httpError = error as HttpErrorResponse;
+      this.reservationError =
+        httpError.status === 409
+          ? 'This seat is already booked for those dates. Availability has been refreshed.'
+          : httpError.status === 401
+            ? 'Your session expired. Please log in again.'
+            : (httpError.error?.message ?? 'Could not complete the reservation.');
+      await this.loadSeatStatus();
+    } finally {
+      this.savingReservation = false;
+    }
   }
 
   @HostListener('document:keydown.escape')

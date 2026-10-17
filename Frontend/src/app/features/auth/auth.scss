@@ -1,0 +1,28 @@
+:host { display: block; min-height: 100vh; }
+.auth-page { min-height: 100vh; padding: 34px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at top left, #e8f5ee 0, transparent 38%), #f7f8f6; color: #18251f; }
+.brand { font-size: 1.45rem; font-weight: 800; letter-spacing: -.04em; color: #18251f; text-decoration: none; margin-bottom: 26px; }
+.brand span { color: #2b8a62; }
+.auth-card { width: min(100%, 470px); background: white; border: 1px solid #e5ebe7; border-radius: 24px; padding: clamp(24px, 5vw, 42px); box-shadow: 0 22px 70px #173c2912; }
+.back-link { display: inline-block; margin-bottom: 28px; color: #64756b; text-decoration: none; font-size: .9rem; }
+.eyebrow { margin: 0 0 10px; color: #2b8a62; font-size: .75rem; font-weight: 800; letter-spacing: .15em; }
+h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.25rem); line-height: 1.15; letter-spacing: -.045em; }
+.subtitle { margin: 12px 0 26px; color: #718078; line-height: 1.6; font-size: .96rem; }
+form { display: flex; flex-direction: column; }
+label { margin: 0 0 8px; font-size: .87rem; font-weight: 700; color: #31433a; }
+input { width: 100%; box-sizing: border-box; border: 1px solid #dce5df; border-radius: 11px; padding: 13px 14px; margin-bottom: 18px; font: inherit; color: #18251f; outline: none; background: #fff; transition: border-color .15s, box-shadow .15s; }
+input:focus { border-color: #2b8a62; box-shadow: 0 0 0 3px #2b8a621a; }
+.name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.primary { width: 100%; border: 0; border-radius: 11px; padding: 14px 18px; margin-top: 4px; background: #237b55; color: white; font: inherit; font-weight: 750; cursor: pointer; transition: background .15s, transform .15s; }
+.primary:hover:not(:disabled) { background: #1b6747; transform: translateY(-1px); }
+.primary:disabled { opacity: .65; cursor: wait; }
+.switch, .resend { text-align: center; color: #718078; font-size: .9rem; margin: 22px 0 0; }
+.switch button, .resend button, .text-button { border: 0; background: none; padding: 0; color: #237b55; font: inherit; font-weight: 750; cursor: pointer; }
+.resend button:disabled { opacity: .6; cursor: wait; }
+.text-button { display: block; margin: 18px auto 0; font-size: .9rem; }
+.mail-icon { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 16px; background: #eaf5ef; color: #237b55; font-size: 1.6rem; margin-bottom: 24px; }
+.code-input { text-align: center; letter-spacing: .45em; font-size: 1.5rem; font-weight: 800; }
+.notice { margin-top: 18px; padding: 12px 14px; border-radius: 10px; font-size: .9rem; line-height: 1.5; overflow-wrap: anywhere; }
+.success { color: #17623f; background: #edf8f1; border: 1px solid #ccebd8; }
+.error { color: #9e3030; background: #fff0f0; border: 1px solid #f3d0d0; }
+.footnote { color: #8a9890; font-size: .82rem; text-align: center; margin: 22px 0 0; }
+@media (max-width: 440px) { .auth-page { padding: 22px 14px; } .auth-card { border-radius: 18px; } .name-row { grid-template-columns: 1fr; gap: 0; } }

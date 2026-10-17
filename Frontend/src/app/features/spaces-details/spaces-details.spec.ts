@@ -1,16 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SpacesDetails } from './spaces-details';
+import { provideRouter } from '@angular/router';
+import { SpaceDetails } from './spaces-details';
 
-describe('SpacesDetails', () => {
-  let component: SpacesDetails;
-  let fixture: ComponentFixture<SpacesDetails>;
+describe('SpaceDetails', () => {
+  let component: SpaceDetails;
+  let fixture: ComponentFixture<SpaceDetails>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SpacesDetails],
+      imports: [SpaceDetails],
+      providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SpacesDetails);
+    fixture = TestBed.createComponent(SpaceDetails);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

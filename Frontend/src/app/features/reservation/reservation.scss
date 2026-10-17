@@ -99,6 +99,41 @@
 
 
 /* =====================================================
+   RESERVATION DATE RANGE
+===================================================== */
+
+.reservation-date-range {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 22px;
+
+  label {
+    display: grid;
+    gap: 7px;
+    color: #555;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  input {
+    min-width: 190px;
+    padding: 11px 12px;
+    border: 1px solid #d8d8e0;
+    border-radius: 9px;
+    background: #fff;
+    color: #171717;
+    font: inherit;
+  }
+
+  input:focus-visible {
+    outline: 2px solid #635bff;
+    outline-offset: 2px;
+  }
+}
+
+
+/* =====================================================
    LEGEND
 ===================================================== */
 
@@ -401,6 +436,17 @@ $floor: #fcfcfd;
     .s-body { fill: #f87171; stroke: #b91c1c; }
     .s-back { fill: #dc2626; stroke: #b91c1c; }
     .s-num  { fill: #fff; }
+  }
+
+  /* unconfigured = neutral grey; the physical layout stays unchanged */
+  &.unconfigured {
+    cursor: not-allowed;
+    opacity: 0.55;
+
+    .s-desk { fill: #9ca3af; stroke: #6b7280; }
+    .s-body { fill: #d1d5db; stroke: #6b7280; }
+    .s-back { fill: #9ca3af; stroke: #6b7280; }
+    .s-num  { fill: #374151; }
   }
 
   /* mine = green */

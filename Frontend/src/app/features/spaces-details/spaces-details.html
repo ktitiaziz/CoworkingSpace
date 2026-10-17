@@ -8,7 +8,6 @@
     Coworking<span>Space</span>
   </div>
 
-
   <div class="nav-links">
 
     <a routerLink="/">
@@ -23,19 +22,11 @@
       About
     </a>
 
-
-    <button
-      class="login-btn"
-      type="button"
-      (click)="openLogin()"
-    >
-      Login
-    </button>
+    <app-account-menu />
 
   </div>
 
 </nav>
-
 
 
 <!-- ==========================================
@@ -46,11 +37,6 @@
 
   <main class="details-page">
 
-
-    <!-- ========================================
-         BACK
-    ========================================= -->
-
     <a
       routerLink="/spaces"
       class="back-link"
@@ -59,17 +45,9 @@
     </a>
 
 
-
-    <!-- ========================================
-         MAIN DETAILS
-    ========================================= -->
-
     <section class="details-container">
 
-
-      <!-- ======================================
-           IMAGE
-      ======================================= -->
+      <!-- IMAGE -->
 
       <div class="details-image">
 
@@ -78,7 +56,6 @@
           [alt]="space.name"
         />
 
-
         <span class="space-type">
           {{ space.type }}
         </span>
@@ -86,41 +63,30 @@
       </div>
 
 
-
-      <!-- ======================================
-           INFORMATION
-      ======================================= -->
+      <!-- INFORMATION -->
 
       <div class="details-content">
-
 
         <p class="eyebrow">
           {{ space.type }}
         </p>
 
-
         <h1>
           {{ space.name }}
         </h1>
 
-
         <p class="location">
           📍 {{ space.location }}
         </p>
-
 
         <p class="description">
           {{ space.description }}
         </p>
 
 
-
-        <!-- ====================================
-             INFO
-        ===================================== -->
+        <!-- INFO -->
 
         <div class="info-grid">
-
 
           <div class="info-item">
 
@@ -141,7 +107,6 @@
             </div>
 
           </div>
-
 
 
           <div class="info-item">
@@ -165,7 +130,6 @@
           </div>
 
 
-
           <div class="info-item">
 
             <span class="info-icon">
@@ -185,7 +149,6 @@
             </div>
 
           </div>
-
 
 
           <div class="info-item">
@@ -208,21 +171,16 @@
 
           </div>
 
-
         </div>
 
 
-
-        <!-- ====================================
-             AMENITIES
-        ===================================== -->
+        <!-- AMENITIES -->
 
         <div class="amenities">
 
           <h2>
             Amenities
           </h2>
-
 
           <div class="amenity-list">
 
@@ -255,20 +213,15 @@
         </div>
 
 
-
-        <!-- ====================================
-             RESERVATION
-        ===================================== -->
+        <!-- RESERVATION -->
 
         <div class="reservation-box">
-
 
           <div>
 
             <small>
               Starting from
             </small>
-
 
             <strong>
 
@@ -283,35 +236,23 @@
           </div>
 
 
-
-          <!-- IMPORTANT:
-               NO routerLink HERE
-          -->
-
           <button
             type="button"
             class="reserve-btn"
-            (click)="openLogin()"
+            [routerLink]="['/spaces', space.id, 'reserve']"
           >
-
             Reserve this space
-
           </button>
-
 
         </div>
 
-
       </div>
 
-
     </section>
-
 
   </main>
 
 }
-
 
 
 <!-- ==========================================
@@ -326,11 +267,9 @@
       Space not found
     </h1>
 
-
     <p>
       The workspace you're looking for doesn't exist.
     </p>
-
 
     <a routerLink="/spaces">
       Back to spaces
@@ -339,7 +278,6 @@
   </main>
 
 }
-
 
 
 <!-- ==========================================
@@ -353,16 +291,10 @@
     (click)="closeAuthModal()"
   >
 
-
-    <!-- ======================================
-         MODAL
-    ======================================= -->
-
     <div
       class="auth-modal"
       (click)="$event.stopPropagation()"
     >
-
 
       <!-- CLOSE -->
 
@@ -376,7 +308,6 @@
       </button>
 
 
-
       <!-- ====================================
            LOGIN
       ===================================== -->
@@ -385,29 +316,22 @@
 
         <div class="auth-content">
 
-
           <div class="auth-icon">
             🔐
           </div>
-
 
           <p class="auth-eyebrow">
             WELCOME BACK
           </p>
 
-
           <h2>
             Sign in to continue
           </h2>
 
-
           <p class="auth-description">
-
             You need to be connected to reserve
             a coworking space.
-
           </p>
-
 
 
           <!-- EMAIL -->
@@ -418,15 +342,15 @@
               Email
             </label>
 
-
             <input
+              #loginEmail
               id="login-email"
               type="email"
               placeholder="you@example.com"
+              (input)="clearAuthError()"
             />
 
           </div>
-
 
 
           <!-- PASSWORD -->
@@ -437,15 +361,26 @@
               Password
             </label>
 
-
             <input
+              #loginPassword
               id="login-password"
               type="password"
               placeholder="••••••••"
+              (input)="clearAuthError()"
             />
 
           </div>
 
+
+          <!-- ERROR -->
+
+          @if (authError) {
+
+            <div class="auth-error">
+              ⚠️ {{ authError }}
+            </div>
+
+          }
 
 
           <!-- LOGIN -->
@@ -453,13 +388,10 @@
           <button
             type="button"
             class="auth-submit"
-            (click)="login()"
+            (click)="login(loginEmail.value, loginPassword.value)"
           >
-
             Sign In
-
           </button>
-
 
 
           <!-- SWITCH -->
@@ -477,11 +409,9 @@
 
           </p>
 
-
         </div>
 
       }
-
 
 
       <!-- ====================================
@@ -492,29 +422,22 @@
 
         <div class="auth-content">
 
-
           <div class="auth-icon">
             ✨
           </div>
-
 
           <p class="auth-eyebrow">
             GET STARTED
           </p>
 
-
           <h2>
             Create your account
           </h2>
 
-
           <p class="auth-description">
-
             Create an account to reserve your
             favorite coworking spaces.
-
           </p>
-
 
 
           <!-- NAME -->
@@ -525,15 +448,15 @@
               Full name
             </label>
 
-
             <input
+              #signupName
               id="signup-name"
               type="text"
               placeholder="John Doe"
+              (input)="clearAuthError()"
             />
 
           </div>
-
 
 
           <!-- EMAIL -->
@@ -544,15 +467,15 @@
               Email
             </label>
 
-
             <input
+              #signupEmail
               id="signup-email"
               type="email"
               placeholder="you@example.com"
+              (input)="clearAuthError()"
             />
 
           </div>
-
 
 
           <!-- PASSWORD -->
@@ -563,15 +486,26 @@
               Password
             </label>
 
-
             <input
+              #signupPassword
               id="signup-password"
               type="password"
               placeholder="••••••••"
+              (input)="clearAuthError()"
             />
 
           </div>
 
+
+          <!-- ERROR -->
+
+          @if (authError) {
+
+            <div class="auth-error">
+              ⚠️ {{ authError }}
+            </div>
+
+          }
 
 
           <!-- SIGN UP -->
@@ -579,13 +513,14 @@
           <button
             type="button"
             class="auth-submit"
-            (click)="signup()"
+            (click)="signup(
+              signupName.value,
+              signupEmail.value,
+              signupPassword.value
+            )"
           >
-
             Create Account
-
           </button>
-
 
 
           <!-- SWITCH -->
@@ -603,11 +538,9 @@
 
           </p>
 
-
         </div>
 
       }
-
 
     </div>
 

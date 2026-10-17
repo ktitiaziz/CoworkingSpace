@@ -1,3 +1,4 @@
+import { AuthPage } from './features/auth/auth';
 import { Routes } from '@angular/router';
 
 import { Home } from './features/home/home';
@@ -7,6 +8,7 @@ import { Reservation } from './features/reservation/reservation';
 import { MyReservations } from './features/myreserv/myreserv';
 
 export const routes: Routes = [
+  { path: 'auth', component: AuthPage },
   {
     path: '',
     component: Home

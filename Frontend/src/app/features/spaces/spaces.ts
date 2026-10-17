@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AccountMenu } from '../../shared/account-menu/account-menu';
 
 interface CoworkingSpace {
   id: number;
@@ -14,7 +15,7 @@ interface CoworkingSpace {
 
 @Component({
   selector: 'app-spaces',
-  imports: [RouterLink],
+  imports: [RouterLink, AccountMenu],
   templateUrl: './spaces.html',
   styleUrl: './spaces.scss'
 })
